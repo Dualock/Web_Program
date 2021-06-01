@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-y5_5msd7ipvn(!rmt!l82(gu)+%+w5^6ujgusnku$xfigzigpy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['locathost', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
