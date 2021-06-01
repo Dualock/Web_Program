@@ -20,14 +20,14 @@ Para iniciar el servidor, correr:
 python3 /home/proyecto2/manage.py runserver 0.0.0.0:8000
 ```
 
-### Otros comandos Útiles de Docker
+### Otros Comandos Útiles de Docker
 ```
 docker image ls -a     # Mostrar todas las imagenes
 docker ps -a           # Mostrar todos los contenedores
 docker system prune -f # Limpiar imagenes y contenedores
 ```
 
-### Otros comandos Útiles
+### Otros Comandos Útiles
 ```
 lsof -i -P -n # Revisar procesos en puertos
 ```
