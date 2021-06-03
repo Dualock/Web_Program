@@ -54,7 +54,7 @@ ROOT_URLCONF = 'django_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/home/dualock/Web_Program/django_app/django_app/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
