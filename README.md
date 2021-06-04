@@ -1,6 +1,10 @@
 # Web_Program
 First attemp to introduce ourselves to web development
 
+## Diagrama de Modelos del Proyecto
+
+![Diagrama de Modelos](Modelos.svg)
+
 ## Docker
 ### Creación de la Imagen con Docker
 Para crear una imagen con todo lo requerido para ejecutar el proyecto, correr:
