@@ -5,6 +5,11 @@ First attemp to introduce ourselves to web development
 
 ![Diagrama de Modelos](Modelos.svg)
 
+## Ejecición Local
+```
+python3 manage.py runserver 0.0.0.0:8000
+```
+
 ## Docker
 ### Creación de la Imagen con Docker
 Para crear una imagen con todo lo requerido para ejecutar el proyecto, correr:

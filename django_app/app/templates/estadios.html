@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>My test page</title>
+</head>
+
+<body>
+  {% if estadios_disponibles %}
+  <ul>
+    {% for estadio in estadios_disponibles %}
+    <li><a href="/estadio/{{ estadio.id }}/">{{ estadio.nombre }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No hay estadios disponibles.</p>
+  {% endif %}
+</body>
+
+</html>
