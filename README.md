@@ -1,6 +1,10 @@
 # Web_Program
 First attemp to introduce ourselves to web development
 
+## Diagrama de Modelos del Proyecto
+
+![Diagrama de Modelos](Modelos.svg)
+
 ## Ejecición Local
 ```
 python3 manage.py runserver 0.0.0.0:8000
