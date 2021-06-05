@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Estadios {% endblock %}
+
+{% block content %}
+  {% if estadios_disponibles %}
+  <ul>
+    {% for estadio in estadios_disponibles %}
+    <li><a href="/estadio/{{ estadio.id }}/">{{ estadio.nombre }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No hay estadios disponibles.</p>
+  {% endif %}
+
+{% endblock %}
