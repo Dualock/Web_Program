@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if estadio %}
+<h1>Estadio {{ estadio.nombre }}</h1>
+Capacidad: {{ estadio.capacidad }}
+{% else %}
+<p>Estadio no encontrado.</p>
+{% endif %}
+{% endblock %}
