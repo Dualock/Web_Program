@@ -277,3 +277,16 @@ ul.errorlist{
   font-style: italic;
   color: red;
 }
+
+
+
+.login-form table{
+  background-color: rgba(255, 255, 255, .5);
+  margin: 1em auto 0;
+  text-align: center;
+  font-family: "Raleway";
+}
+.login-form table td{
+  padding: 5px;
+  font-size: larger;
+}

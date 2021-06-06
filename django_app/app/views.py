@@ -1,7 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 
 from .models import Estadio
+from .forms import LoginForm, SignupForm
+
 
 def index(request):
     #return HttpResponse("Hello, world. You're at the polls index.")
@@ -21,10 +24,43 @@ def estadio(request, estadio_id):
     context = {
         'estadio': info_estadio
     }
-    return render(request, 'Estadios.html', context)
+    return render(request, 'Estadio.html', context)
 
-def log_in(request):
-    return render(request, 'Log_in.html')
+def login(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = LoginForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/thanks/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = LoginForm()
+
+    return render(request, 'Login.html', {'form': form})
+
+def signup(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = SignupForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/thanks/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SignupForm()
+
+    return render(request, 'Signup.html', {'form': form})
 
 def eventos(request):
     return render(request, 'Eventos.html')
