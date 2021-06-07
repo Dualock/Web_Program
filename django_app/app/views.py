@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
+from django.contrib.auth import authenticate, login, logout
+
 from .models import Estadio
 from .forms import LoginForm, SignupForm
 
@@ -26,7 +28,7 @@ def estadio(request, estadio_id):
     }
     return render(request, 'Estadio.html', context)
 
-def login(request):
+def log_in(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -34,10 +36,20 @@ def login(request):
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
+            username=form.cleaned_data['username']
+            password=form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                # login(request=request)
+                login(request, user)
+                # Redirect to a success page.
+                return HttpResponseRedirect('/')
+            else:
+                # Return an 'invalid login' error message.
+                return render(request, 'Login.html', {'form': form, 'isError': True})
             # ...
+            # print(form.cleaned_data)
             # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
-
     # if a GET (or any other method) we'll create a blank form
     else:
         form = LoginForm()

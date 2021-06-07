@@ -4,6 +4,13 @@
 <form action="/login/" method="post" class="login-form">
   {% csrf_token %}
   <table>
+    {% if isError %}
+    <tr>
+      <td colspan="2" class="alert alert-danger">
+        Datos de ingreso inválidos.
+      </td>
+    </tr>
+    {% endif %}
     {{ form }}
     <tr>
       <td colspan="2">
