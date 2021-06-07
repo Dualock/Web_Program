@@ -74,5 +74,9 @@ def signup(request):
 
     return render(request, 'Signup.html', {'form': form})
 
+def log_out(request):
+    logout(request)
+    return HttpResponseRedirect('/')
+
 def eventos(request):
     return render(request, 'Eventos.html')
