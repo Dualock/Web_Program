@@ -7,10 +7,11 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Estadio
 from .forms import LoginForm, SignupForm
 
-
 def index(request):
+
     #return HttpResponse("Hello, world. You're at the polls index.")
-    return render(request, "Home.html")
+    print(request.user.is_authenticated)
+    return render(request, "Home.html", {'isAuthenticated':request.user.is_authenticated})
 
 
 def estadios(request):
