@@ -9,24 +9,29 @@ from .models import Estadio
 from .forms import LoginForm, SignupForm
 
 def index(request):
-
-    #return HttpResponse("Hello, world. You're at the polls index.")
+    context = {
+        'isAuthenticated':request.user.is_authenticated,
+        'is_home_active': True
+    }
     print(request.user.is_authenticated)
-    return render(request, "Home.html", {'isAuthenticated':request.user.is_authenticated})
+    return render(request, "Home.html", context)
 
 
 def estadios(request):
     estadios_disponibles = Estadio.objects.all
     context = {
-        'estadios_disponibles': estadios_disponibles
+        'isAuthenticated':request.user.is_authenticated,
+        'estadios_disponibles': estadios_disponibles,
+        'is_estadio_active': True
     }
     return render(request, 'Estadios.html', context)
 
 def estadio(request, estadio_id):
     info_estadio = Estadio.objects.get(id=estadio_id)
-    print(info_estadio)
     context = {
-        'estadio': info_estadio
+        'isAuthenticated':request.user.is_authenticated,
+        'estadio': info_estadio,
+        'is_estadio_active': True
     }
     return render(request, 'Estadio.html', context)
 
@@ -101,4 +106,8 @@ def log_out(request):
     return HttpResponseRedirect('/')
 
 def eventos(request):
-    return render(request, 'Eventos.html')
+    context = {
+        'isAuthenticated':request.user.is_authenticated,
+        'is_eventos_active': True
+    }
+    return render(request, 'Eventos.html', context)
