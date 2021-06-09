@@ -1,21 +1,38 @@
 {% extends "base.html" %}
 
-{% block content %}
-<form action="/signup/" method="post" class="login-form">
-  {% csrf_token %}
-  <table>
-    {{ form }}
-    <tr>
-      <td colspan="2">
-        <input type="submit" value="Crear Cuenta">
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <a href="{% url 'login' %}">Hacer Login</a>
-      </td>
-    </tr>
+{% load crispy_forms_tags %}
 
-  </table>
-</form>
+{% block content %}
+
+<div class="signup-form">
+  {% if formInputSent %}
+
+  {% if userCreated %}
+  <div class="alert alert-success" role="alert">
+    Usuario creado exitósamente.
+  </div>
+  <a class="btn btn-secondary" href="{% url 'login' %}">Hacer Login</a>
+  {% else %}
+  <div class="alert alert-danger" role="alert">
+    Error: {{ error }}
+  </div>
+  <a href="{% url 'signup' %}" class="btn btn-primary">Volver a intentar</a>
+  {% endif %}
+  {% else %}
+  <form action="/signup/" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="control-group">
+      <div class="controls signup-form-btn">
+        <input class="btn btn-primary" type="submit" value="Crear Cuenta">
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls signup-form-btn">
+        <a class="btn btn-secondary" href="{% url 'login' %}">Hacer Login</a>
+      </div>
+    </div>
+  </form>
+  {% endif %}
+</div>
 {% endblock %}

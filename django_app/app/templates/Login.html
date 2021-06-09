@@ -1,28 +1,28 @@
 {% extends "base.html" %}
 
-{% block content %}
-<form action="/login/" method="post" class="login-form">
-  {% csrf_token %}
-  <table>
-    {% if isError %}
-    <tr>
-      <td colspan="2" class="alert alert-danger">
-        Datos de ingreso inválidos.
-      </td>
-    </tr>
-    {% endif %}
-    {{ form }}
-    <tr>
-      <td colspan="2">
-        <input type="submit" value="Ingresar">
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <a href="{% url 'signup' %}">Crear Cuenta</a>
-      </td>
-    </tr>
+{% load crispy_forms_tags %}
 
+{% block content %}
+<div class="login-form">
+  {% if formInputSent and not userLoggedIn %}
+  <div colspan="2" class="alert alert-danger">
+    Datos de ingreso inválidos.
+  </div>
+  {% endif %}
+  <form action="/login/" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="control-group">
+      <div class="controls signup-form-btn">
+        <input class="btn btn-primary" type="submit" value="Ingresar">
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls signup-form-btn">
+        <a class="btn btn-secondary" href="{% url 'signup' %}">Crear Cuenta</a>
+      </div>
+    </div>
   </table>
 </form>
+</div>
 {% endblock %}

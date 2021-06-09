@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 
 from .models import Estadio
 from .forms import LoginForm, SignupForm
@@ -30,50 +31,70 @@ def estadio(request, estadio_id):
     return render(request, 'Estadio.html', context)
 
 def log_in(request):
-    # if this is a POST request we need to process the form data
+    context = {
+        'isAuthenticated':request.user.is_authenticated,
+        'form': None,
+        'formInputSent': False,
+        'userLoggedIn': False,
+        'error': None,
+        'is_login_active': True
+    }
+
+    if (context['isAuthenticated']):
+        return HttpResponseRedirect('/')
+
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = LoginForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            username=form.cleaned_data['username']
-            password=form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
+        context['formInputSent'] = True
+        context['form'] = LoginForm(request.POST)
+        if context['form'].is_valid():
+            data = context['form'].cleaned_data
+            user = authenticate(request, username = data['username'], password = data['password'])
             if user is not None:
-                # login(request=request)
                 login(request, user)
-                # Redirect to a success page.
+                context['userLoggedIn'] = True
                 return HttpResponseRedirect('/')
             else:
-                # Return an 'invalid login' error message.
-                return render(request, 'Login.html', {'form': form, 'isError': True})
-            # ...
-            # print(form.cleaned_data)
-            # redirect to a new URL:
-    # if a GET (or any other method) we'll create a blank form
+                context['error'] = "Datos Inválidos."
     else:
-        form = LoginForm()
+        context['form'] = LoginForm()
 
-    return render(request, 'Login.html', {'form': form})
+    return render(request, 'Login.html', context)
 
 def signup(request):
-    # if this is a POST request we need to process the form data
+    context = {
+        'isAuthenticated':request.user.is_authenticated,
+        'form': None,
+        'formInputSent': False,
+        'userCreated': False,
+        'error': None,
+        'is_signup_active': True
+    }
+    if (context['isAuthenticated']):
+        return HttpResponseRedirect('/')
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = SignupForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
-            return HttpResponseRedirect('/thanks/')
-
-    # if a GET (or any other method) we'll create a blank form
+        context['formInputSent'] = True
+        context['form'] = SignupForm(request.POST)
+        if context['form'].is_valid():
+            try:
+                data = context['form'].cleaned_data
+                if User.objects.filter(email = data['email']).exists():
+                    context['error'] = "El email ya existe, debe ser único."
+                elif User.objects.filter(username = data['username']).exists():
+                    context['error'] = "El nombre de usuario ya existe, debe ser único."
+                else:
+                    user = User.objects.create_user(data['username'], data['email'], data['password'])
+                    user.first_name = data['nombre']
+                    user.last_name = data['apellido']
+                    user.save()
+                    context['userCreated'] = True
+            except Exception as e:
+                print("Error desconocido en Signup")
+                print(e)
+                context['error'] = 'Error desconocido'
     else:
-        form = SignupForm()
-
-    return render(request, 'Signup.html', {'form': form})
+        context['form'] = SignupForm()
+    print(context)
+    return render(request, 'Signup.html', context)
 
 def log_out(request):
     logout(request)
