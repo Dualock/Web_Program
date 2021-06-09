@@ -6,6 +6,7 @@ class LoginForm(forms.Form):
 
 class SignupForm(forms.Form):
     nombre = forms.CharField(label='Nombre', max_length=100)
+    apellido = forms.CharField(label='Apellido', max_length=100)
     username = forms.CharField(label='Usuario', max_length=100)
-    email = forms.CharField(label='Email', max_length=100)
+    email = forms.CharField(label='Email', max_length=100, widget=forms.EmailInput)
     password = forms.CharField(label='Clave', max_length=100, widget=forms.PasswordInput)
