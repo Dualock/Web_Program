@@ -5,7 +5,7 @@ First attemp to introduce ourselves to web development
 
 ![Diagrama de Modelos](Modelos.svg)
 
-## Ejecición Local
+## Ejecución Local
 ```
 python3 manage.py runserver 0.0.0.0:8000
 ```
