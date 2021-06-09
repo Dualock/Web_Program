@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="estadios">
   {% if estadios_disponibles %}
   <ul>
     {% for estadio in estadios_disponibles %}
@@ -10,5 +11,6 @@
   {% else %}
   <p>No hay estadios disponibles.</p>
   {% endif %}
+</div>
 
 {% endblock %}

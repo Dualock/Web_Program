@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="signup-form">
+  {% if formInputSent %}
+
+  {% if userCreated %}
+  <div class="alert alert-success" role="alert">
+    Usuario creado exitósamente.
+  </div>
+  <a class="btn btn-secondary" href="{% url 'login' %}">Hacer Login</a>
+  {% else %}
+  <div class="alert alert-danger" role="alert">
+    Error: {{ error }}
+  </div>
+  <a href="{% url 'signup' %}" class="btn btn-primary">Volver a intentar</a>
+  {% endif %}
+  {% else %}
+  <form action="/signup/" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="control-group">
+      <div class="controls signup-form-btn">
+        <input class="btn btn-primary" type="submit" value="Crear Cuenta">
+      </div>
+    </div>
+    <div class="control-group">
+      <div class="controls signup-form-btn">
+        <a class="btn btn-secondary" href="{% url 'login' %}">Hacer Login</a>
+      </div>
+    </div>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

@@ -18,6 +18,7 @@ RUN apt-get update \
 
 # Instalar Django
 RUN pip3 install Django
+RUN pip3 install django-crispy-forms
 
 # Copiar proyecto
 RUN mkdir -p /home/proyecto2
