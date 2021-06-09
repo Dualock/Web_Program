@@ -280,13 +280,45 @@ ul.errorlist{
 
 
 
-.login-form table{
+.login-form, .signup-form {
   background-color: rgba(255, 255, 255, .5);
-  margin: 1em auto 0;
+  margin: 1em auto 1em;
   text-align: center;
   font-family: "Raleway";
+  padding: 10px;
+  border-radius: 0;
 }
-.login-form table td{
-  padding: 5px;
-  font-size: larger;
+
+@media (min-width: 992px) {
+  .login-form, .signup-form {
+    width: 50%;
+    font-size: 1.1rem;
+    border-radius: 5px;
+  }
+}
+
+.signup-form-btn {
+  margin-top: 5px;
+}
+
+.estadios {
+  margin:0 auto;
+  background-color: rgba(255, 255, 255, .5);
+}
+
+.estadios ul li{
+  list-style: none;
+}
+
+.estadios ul li a{
+  color: black
+}
+.estadios ul li a:hover{
+  color: darkgrey
+}
+
+.estadio {
+  margin:0 auto;
+  text-align: center;
+  background-color: rgba(255, 255, 255, .5);
 }
