@@ -21,7 +21,7 @@ docker build . --file Dockerfile --tag proyecto2
 Para iniciar el contenedor a partir de la imagen creada y acceder a la terminal,
 correr:
 ```
-docker run -p 8000:8000 -ti proyecto2
+docker run -p 8000:8000 -ti proyecto2 /bin/bash
 ```
 Para iniciar el servidor, correr:
 ```
