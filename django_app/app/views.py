@@ -8,46 +8,41 @@ from django.contrib.auth.models import User
 from .models import Estadio
 from .forms import LoginForm, SignupForm
 
-def index(request):
+def getBaseContext(request):
     context = {
         'isAuthenticated':request.user.is_authenticated,
-        'is_home_active': True
+        'user': None
     }
-    print(request.user.is_authenticated)
+    if context['isAuthenticated']:
+        context['user'] = request.user
+    return context
+
+def index(request):
+    context = getBaseContext(request=request)
+    context['is_home_active'] = True
     return render(request, "Home.html", context)
 
-
 def estadios(request):
-    estadios_disponibles = Estadio.objects.all
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'estadios_disponibles': estadios_disponibles,
-        'is_estadio_active': True
-    }
+    context = getBaseContext(request=request)
+    context['is_estadio_active'] = True
+    context['estadios_disponibles'] = Estadio.objects.all
     return render(request, 'Estadios.html', context)
 
 def estadio(request, estadio_id):
-    info_estadio = Estadio.objects.get(id=estadio_id)
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'estadio': info_estadio,
-        'is_estadio_active': True
-    }
+    context = getBaseContext(request=request)
+    context['is_estadio_active'] = True
+    context['estadio'] = Estadio.objects.get(id=estadio_id)
     return render(request, 'Estadio.html', context)
 
 def log_in(request):
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'form': None,
-        'formInputSent': False,
-        'userLoggedIn': False,
-        'error': None,
-        'is_login_active': True
-    }
-
+    context = getBaseContext(request=request)
+    context['is_login_active'] = True
+    context['form'] = None
+    context['formInputSent'] = False
+    context['userLoggedIn'] = False
+    context['error'] = None
     if (context['isAuthenticated']):
         return HttpResponseRedirect('/')
-
     if request.method == 'POST':
         context['formInputSent'] = True
         context['form'] = LoginForm(request.POST)
@@ -66,14 +61,12 @@ def log_in(request):
     return render(request, 'Login.html', context)
 
 def signup(request):
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'form': None,
-        'formInputSent': False,
-        'userCreated': False,
-        'error': None,
-        'is_signup_active': True
-    }
+    context = getBaseContext(request=request)
+    context['is_signup_active'] = True
+    context['form'] = None
+    context['formInputSent'] = False
+    context['userCreated'] = False
+    context['error'] = None
     if (context['isAuthenticated']):
         return HttpResponseRedirect('/')
     if request.method == 'POST':
@@ -106,8 +99,28 @@ def log_out(request):
     return HttpResponseRedirect('/')
 
 def eventos(request):
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'is_eventos_active': True
-    }
+    context = getBaseContext(request=request)
+    context['is_eventos_active'] = True
     return render(request, 'Eventos.html', context)
+
+def yo(request):
+    context = getBaseContext(request=request)
+    context['is_perfil_active'] = True
+    if not context['isAuthenticated']:
+        return HttpResponseRedirect('/')
+    return render(request, 'Eventos.html', context)
+
+def perfil(request):
+    context = getBaseContext(request=request)
+    context['is_perfil_active'] = True
+    if not context['isAuthenticated']:
+        return HttpResponseRedirect('/')
+    return render(request, 'Eventos.html', context)
+
+def admin(request):
+    context = getBaseContext(request=request)
+    if not (context['isAuthenticated'] and (context['user'].is_staff or context['user'].is_superadmin)):
+        return HttpResponseRedirect('/')
+    context['is_admin_active'] = True
+    context['userList'] = True
+    return render(request, 'Admin.html', context)

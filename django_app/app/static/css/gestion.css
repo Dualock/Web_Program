@@ -322,3 +322,21 @@ ul.errorlist{
   text-align: center;
   background-color: rgba(255, 255, 255, .5);
 }
+
+
+.admin-page {
+  background-color: rgba(255, 255, 255, .5);
+  margin: 1em auto 1em;
+  text-align: center;
+  font-family: "Raleway";
+  padding: 10px;
+  border-radius: 0;
+}
+
+@media (min-width: 992px) {
+  .admin-page{
+    width: 50%;
+    font-size: 1.1rem;
+    border-radius: 5px;
+  }
+}
