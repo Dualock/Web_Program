@@ -143,3 +143,17 @@ def admin(request):
     context['usuarios_disponibles'] = User.objects.all
 
     return render(request, 'Admin.html', context)
+
+
+def delete_estadio(request, estadio_id):
+    context = getBaseContext(request=request)
+    if not context['isAuthenticated'] or not context['user'].is_staff:
+        return HttpResponseRedirect('/')
+
+    try:
+        Estadio.objects.get(id=estadio_id).delete()
+        print('estadio borrado')
+    except Estadio.DoesNotExist:
+        print('ERROR: estadio no borrado')
+
+    return HttpResponseRedirect('/estadios')
