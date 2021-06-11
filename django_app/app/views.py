@@ -5,8 +5,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
-from .models import Estadio
-from .forms import LoginForm, SignupForm
+from .models import Estadio, TipoAsiento
+from .forms import LoginForm, SignupForm, CreateEstadioForm, AdminSignupForm
 
 def getBaseContext(request):
     context = {
@@ -123,4 +123,9 @@ def admin(request):
         return HttpResponseRedirect('/')
     context['is_admin_active'] = True
     context['userList'] = True
+    context['create_estadio_form'] = CreateEstadioForm()
+    context['admin_signup_form'] = AdminSignupForm()
+    context['estadios_disponibles'] = Estadio.objects.all
+    context['usuarios_disponibles'] = User.objects.all
+
     return render(request, 'Admin.html', context)
