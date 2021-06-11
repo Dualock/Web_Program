@@ -45,7 +45,14 @@
   <!-- Bootstrap -->
   <script src="{% static '/vendor/jquery/jquery.min.js'%}"></script>
   <script src="{% static '/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+  <script>
+    $(document).ready(function () {
+      $('.no-selection').mousedown(function (e) { e.preventDefault(); });
+    });
+  </script>
+  {% block end %}
 
+  {% endblock %}
 </body>
 
 
