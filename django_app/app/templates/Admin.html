@@ -5,14 +5,28 @@
 {% block content %}
 <div class="admin-page">
 
-  <h1>Estadios</h1>
-  <h1>Tipos de Asiento</h1>
-  <h1>Usuarios</h1>
-
+  {% include "admin/Estadios.html" %}
+  {% include "admin/Usuarios.html" %}
 
 </div>
 {% endblock %}
 
 {% block end %}
+<script>
+  $(document).ready(function () {
+    $("#agregar-estadio-header").click(function () {
+      $("#agregar-estadio-body").toggle();
+    });
+    $("#lista-estadios-header").click(function () {
+      $("#lista-estadios-body").toggle();
+    });
 
+    $("#agregar-usuario-header").click(function () {
+      $("#agregar-usuario-body").toggle();
+    });
+    $("#lista-usuarios-header").click(function () {
+      $("#lista-usuarios-body").toggle();
+    });
+  });
+</script>
 {% endblock %}

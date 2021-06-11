@@ -1,0 +1,60 @@
+{% load crispy_forms_tags %}
+
+<div class="card admin-card">
+
+  <div class="card-header no-selection">
+    <h1>
+      Estadios
+    </h1>
+  </div>
+
+  <div class="card-body">
+
+    <div class="card border-primary admin-card">
+      <div id="lista-estadios-header" class="card-header no-selection cursor">
+        <h2>
+          Lista de Estadios
+        </h2>
+      </div>
+      <div id="lista-estadios-body" class="card-body hidden">
+        <div>
+          {% if estadios_disponibles %}
+          <ul>
+            {% for estadio in estadios_disponibles %}
+            <li>
+              <div class="card">
+                <a href="/estadio/{{ estadio.id }}/">{{ estadio.nombre }}</a>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <span class="alert alert-danger">
+            No hay estadios disponibles.
+          </span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="card border-success admin-card">
+      <div id="agregar-estadio-header" class="card-header cursor no-selection">
+        <h2>
+          Agregar Estadio
+        </h2>
+      </div>
+      <div id="agregar-estadio-body" class="hidden card-body">
+        <form action="/crearEstadio/" method="post">
+          {% csrf_token %}
+          {{ create_estadio_form|crispy }}
+          <div class="control-group">
+            <div class="controls signup-form-btn">
+              <input class="btn btn-success" type="submit" value="Crear Estadio">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
