@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
-from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage, Paginator
 
 from .models import Estadio, TipoAsiento
 from .forms import LoginForm, SignupForm, CreateEstadioForm, AdminSignupForm
@@ -28,7 +28,11 @@ def estadios(request, pagina=1, per_page=5):
     context = getBaseContext(request=request)
     context['is_estadio_active'] = True
     estadios = Paginator(Estadio.objects.all(),per_page)
-    context['estadios_disponibles'] = estadios.page(pagina)
+    try:
+        context['estadios_disponibles'] = estadios.page(pagina)
+    except EmptyPage:
+        return HttpResponseRedirect('/estadios/%s' % estadios.num_pages)
+
     context['pagina'] = pagina
     context['paginas'] = range(1,estadios.num_pages+1)
     context['num_paginas'] = estadios.num_pages
@@ -37,7 +41,11 @@ def estadios(request, pagina=1, per_page=5):
 def estadio(request, estadio_id):
     context = getBaseContext(request=request)
     context['is_estadio_active'] = True
-    context['estadio'] = Estadio.objects.get(id=estadio_id)
+    try:
+        context['estadio'] = Estadio.objects.get(id=estadio_id)
+    except Estadio.DoesNotExist:
+        context['estadio'] = None
+
     return render(request, 'Estadio.html', context)
 
 def log_in(request):
