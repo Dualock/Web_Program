@@ -1,0 +1,18 @@
+{% if num_paginas > 1 %}
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item {% if pagina is 1 %}disabled{% endif %}"><a class="page-link" href="/estadios/1">&laquo;</a></li>
+    {% for num_pagina in paginas %}
+    <li class="page-item {% if pagina is num_pagina %}active{% endif %}">
+      <a class="page-link" href="{% if pagina is num_pagina %}#{% else %}/estadios/{{ num_pagina }}{% endif %}">
+        {{ num_pagina }}
+      </a>
+    </li>
+    {% endfor %}
+    <li class="page-item {% if pagina == num_paginas %}disabled{% endif %}"><a class="page-link"
+        href="/estadios/{{ num_paginas }}">&raquo;</a></li>
+  </ul>
+</nav>
+
+{% endif %}

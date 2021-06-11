@@ -1,0 +1,27 @@
+<div class="card-body">
+
+  {% if estadios_disponibles %}
+
+  {% include "estadios/Pagination.html" %}
+
+  <ul class="list-group-flush">
+    {% for estadio in estadios_disponibles %}
+    <li class="list-group-item">
+      <h2>
+        <a href="/estadio/{{ estadio.id }}/">{{ estadio.nombre }}</a>
+      </h2>
+      <p>{{ estadio.descripción }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+
+  {% include "estadios/Pagination.html" %}
+
+  {% else %}
+    <div class="alert alert-danger">
+      <p>No hay estadios disponibles.</p>
+    </div>
+  {% endif %}
+
+
+</div>

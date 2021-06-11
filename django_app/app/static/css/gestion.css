@@ -278,7 +278,22 @@ ul.errorlist{
   color: red;
 }
 
+.fitted-box {
+  background-color: rgba(255, 255, 255, .5);
+  margin: 1em auto 1em;
+  text-align: center;
+  font-family: "Raleway";
+  padding: 10px;
+  border-radius: 0;
+}
 
+@media (min-width: 992px) {
+  .fitted-box {
+    width: 992px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+  }
+}
 
 .login-form, .signup-form {
   background-color: rgba(255, 255, 255, .5);
