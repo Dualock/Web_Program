@@ -278,6 +278,12 @@ ul.errorlist{
   color: red;
 }
 
+/*******************************************************************************
+
+ Estilos Propios
+
+*******************************************************************************/
+
 .fitted-box {
   background-color: rgba(255, 255, 255, .5);
   margin: 1em auto 1em;
@@ -306,7 +312,7 @@ ul.errorlist{
 
 @media (min-width: 992px) {
   .login-form, .signup-form {
-    width: 50%;
+    width: 992px;
     font-size: 1.1rem;
     border-radius: 5px;
   }
@@ -350,8 +356,19 @@ ul.errorlist{
 
 @media (min-width: 992px) {
   .admin-page{
-    width: 50%;
+    width: 992px;
     font-size: 1.1rem;
     border-radius: 5px;
   }
+}
+
+.hidden {
+  display: none;
+}
+
+.admin-card {
+  margin-bottom: 1em;
+}
+.cursor {
+  cursor: pointer;
 }
