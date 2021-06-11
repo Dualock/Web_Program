@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Estadio(models.Model):
     nombre = models.CharField(max_length=200)
-    descripción = models.TextField
+    descripción = models.TextField(default="")
 
 class ImagenEstadio(models.Model):
     estadio = models.ForeignKey(Estadio, on_delete=models.CASCADE)
