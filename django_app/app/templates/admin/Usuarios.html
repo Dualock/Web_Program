@@ -1,0 +1,76 @@
+{% load crispy_forms_tags %}
+
+<div class="card admin-card">
+
+  <div class="card-header">
+    <h1>
+      Usuarios
+    </h1>
+  </div>
+
+  <div class="card-body">
+
+    <div class="card border-primary admin-card">
+      <div id="lista-usuarios-header" class="card-header cursor no-selection">
+        <h2>Lista de Usuarios</h2>
+      </div>
+
+      <div id="lista-usuarios-body" class="card-body hidden">
+        <div>
+          {% if usuarios_disponibles %}
+          <ul class="list-group-flush">
+            {% for usuario in usuarios_disponibles %}
+            <li class="list-group-item">
+              <h3>
+                <a href="/perfil/{{ usuario.id }}/">{{ usuario.username }}</a>
+                {% if usuario.is_staff %}
+                &nbsp;<span class="badge rounded-pill bg-secondary text-light">Staff</span>
+                {% endif %}
+                {% if usuario.is_superuser %}
+                &nbsp;<span class="badge rounded-pill bg-secondary text-light">Super Usuario</span>
+                {% endif %}
+              </h3>
+              {% if usuario.first_name or usuario.last_name %}
+              <span>{{ usuario.first_name }} {{ usuario.last_name }} | {{ usuario.email }}</span>
+              {% else %}
+              <span>{{ usuario.email }}</span>
+              {% endif %}
+              <br>
+              <span>Creado el {{ usuario.date_joined }}</span>
+              <br>
+              <span>Último login el {{ usuario.last_login }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <span class="alert alert-danger">
+            No hay usuarios disponibles.
+          </span>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card border-success admin-card">
+      <div id="agregar-usuario-header" class="card-header no-selection cursor">
+        <h2>
+          Agregar Usuario
+        </h2>
+      </div>
+      <div id="agregar-usuario-body" class="hidden card-body">
+        <form action="/crearEstadio/" method="post">
+          {% csrf_token %}
+          {{ admin_signup_form|crispy }}
+          <div class="control-group">
+            <div class="controls signup-form-btn">
+              <input class="btn btn-success" type="submit" value="Agregar Usuario">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+</div>

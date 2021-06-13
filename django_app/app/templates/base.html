@@ -1,3 +1,9 @@
+{% load i18n %}
+{% load tz %}
+
+{% timezone "America/Costa_Rica" %}
+{% language 'es' %}
+
 <!doctype html>
 <html>
 
@@ -5,28 +11,28 @@
 
 
   {% load static %}
-    <!-- Bootstrap -->
-    <link href="{% static '/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="{% static '/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
 
-     <!-- Fonts -->
+  <!-- Fonts -->
 
-     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
-     <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i" rel="stylesheet">
 
 
-    <!-- Styles -->
-    <link href="{% static '/css/gestion.css' %}" rel="stylesheet">
+  <!-- Styles -->
+  <link href="{% static '/css/gestion.css' %}" rel="stylesheet">
 </head>
 
 <body>
 
-    <h1 class="site-heading text-center text-white d-none d-lg-block">
+  <h1 class="site-heading text-center text-white d-none d-lg-block">
 
-        <span class="site-heading-lower">Reservacion de espacios</span>
-      </h1>
+    <span class="site-heading-lower">Reservacion de espacios</span>
+  </h1>
 
 
- <!-- Navbar -->
+  <!-- Navbar -->
   {% include "nav.html" %}
 
   {% block content %}
@@ -36,11 +42,21 @@
   <!-- Footer -->
   {% include "footer.html" %}
 
-    <!-- Bootstrap -->
-    <script src="{% static '/vendor/jquery/jquery.min.js'%}"></script>
-    <script src="{% static '/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+  <!-- Bootstrap -->
+  <script src="{% static '/vendor/jquery/jquery.min.js'%}"></script>
+  <script src="{% static '/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+  <script>
+    $(document).ready(function () {
+      $('.no-selection').mousedown(function (e) { e.preventDefault(); });
+    });
+  </script>
+  {% block end %}
 
+  {% endblock %}
 </body>
 
 
 </html>
+
+{% endlanguage %}
+{% endtimezone %}

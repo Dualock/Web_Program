@@ -5,7 +5,16 @@ First attemp to introduce ourselves to web development
 
 ![Diagrama de Modelos](Modelos.svg)
 
+
 ## Ejecución Local
+### Dependencias
+Instalar Dependencias
+```
+apt install python3 python3-pip3
+pip3 install Django
+pip3 install django-crispy-forms
+```
+### Ejecución
 ```
 python3 manage.py runserver 0.0.0.0:8000
 ```
@@ -39,4 +48,11 @@ docker system prune -f # Limpiar imagenes y contenedores
 ### Otros Comandos Útiles
 ```
 lsof -i -P -n # Revisar procesos en puertos
+```
+
+## Activando los Modelos para Crear la Base de Datos
+```
+python3 manage.py makemigrations app
+python3 manage.py sqlmigrate app 0001
+python3 manage.py migrate
 ```

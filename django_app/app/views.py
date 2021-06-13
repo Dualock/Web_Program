@@ -5,49 +5,58 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
-from .models import Estadio
-from .forms import LoginForm, SignupForm
+from django.core.paginator import EmptyPage, Paginator
+
+from .models import Estadio, TipoAsiento
+from .forms import LoginForm, SignupForm, CreateEstadioForm, AdminSignupForm
+
+def getBaseContext(request):
+    context = {
+        'isAuthenticated':request.user.is_authenticated,
+        'user': None
+    }
+    if context['isAuthenticated']:
+        context['user'] = request.user
+    return context
 
 def index(request):
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'is_home_active': True
-    }
-    print(request.user.is_authenticated)
+    context = getBaseContext(request=request)
+    context['is_home_active'] = True
     return render(request, "Home.html", context)
 
+def estadios(request, pagina=1, per_page=5):
+    context = getBaseContext(request=request)
+    context['is_estadio_active'] = True
+    estadios = Paginator(Estadio.objects.all(),per_page)
+    try:
+        context['estadios_disponibles'] = estadios.page(pagina)
+    except EmptyPage:
+        return HttpResponseRedirect('/estadios/%s' % estadios.num_pages)
 
-def estadios(request):
-    estadios_disponibles = Estadio.objects.all
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'estadios_disponibles': estadios_disponibles,
-        'is_estadio_active': True
-    }
+    context['pagina'] = pagina
+    context['paginas'] = range(1,estadios.num_pages+1)
+    context['num_paginas'] = estadios.num_pages
     return render(request, 'Estadios.html', context)
 
 def estadio(request, estadio_id):
-    info_estadio = Estadio.objects.get(id=estadio_id)
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'estadio': info_estadio,
-        'is_estadio_active': True
-    }
+    context = getBaseContext(request=request)
+    context['is_estadio_active'] = True
+    try:
+        context['estadio'] = Estadio.objects.get(id=estadio_id)
+    except Estadio.DoesNotExist:
+        context['estadio'] = None
+
     return render(request, 'Estadio.html', context)
 
 def log_in(request):
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'form': None,
-        'formInputSent': False,
-        'userLoggedIn': False,
-        'error': None,
-        'is_login_active': True
-    }
-
+    context = getBaseContext(request=request)
+    context['is_login_active'] = True
+    context['form'] = None
+    context['formInputSent'] = False
+    context['userLoggedIn'] = False
+    context['error'] = None
     if (context['isAuthenticated']):
         return HttpResponseRedirect('/')
-
     if request.method == 'POST':
         context['formInputSent'] = True
         context['form'] = LoginForm(request.POST)
@@ -66,14 +75,12 @@ def log_in(request):
     return render(request, 'Login.html', context)
 
 def signup(request):
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'form': None,
-        'formInputSent': False,
-        'userCreated': False,
-        'error': None,
-        'is_signup_active': True
-    }
+    context = getBaseContext(request=request)
+    context['is_signup_active'] = True
+    context['form'] = None
+    context['formInputSent'] = False
+    context['userCreated'] = False
+    context['error'] = None
     if (context['isAuthenticated']):
         return HttpResponseRedirect('/')
     if request.method == 'POST':
@@ -106,8 +113,47 @@ def log_out(request):
     return HttpResponseRedirect('/')
 
 def eventos(request):
-    context = {
-        'isAuthenticated':request.user.is_authenticated,
-        'is_eventos_active': True
-    }
+    context = getBaseContext(request=request)
+    context['is_eventos_active'] = True
     return render(request, 'Eventos.html', context)
+
+def yo(request):
+    context = getBaseContext(request=request)
+    context['is_perfil_active'] = True
+    if not context['isAuthenticated']:
+        return HttpResponseRedirect('/')
+    return render(request, 'Eventos.html', context)
+
+def perfil(request):
+    context = getBaseContext(request=request)
+    context['is_perfil_active'] = True
+    if not context['isAuthenticated']:
+        return HttpResponseRedirect('/')
+    return render(request, 'Eventos.html', context)
+
+def admin(request):
+    context = getBaseContext(request=request)
+    if not (context['isAuthenticated'] and (context['user'].is_staff or context['user'].is_superadmin)):
+        return HttpResponseRedirect('/')
+    context['is_admin_active'] = True
+    context['userList'] = True
+    context['create_estadio_form'] = CreateEstadioForm()
+    context['admin_signup_form'] = AdminSignupForm()
+    context['estadios_disponibles'] = Estadio.objects.all
+    context['usuarios_disponibles'] = User.objects.all
+
+    return render(request, 'Admin.html', context)
+
+
+def delete_estadio(request, estadio_id):
+    context = getBaseContext(request=request)
+    if not context['isAuthenticated'] or not context['user'].is_staff:
+        return HttpResponseRedirect('/')
+
+    try:
+        Estadio.objects.get(id=estadio_id).delete()
+        print('estadio borrado')
+    except Estadio.DoesNotExist:
+        print('ERROR: estadio no borrado')
+
+    return HttpResponseRedirect('/estadios')
