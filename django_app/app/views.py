@@ -214,10 +214,11 @@ def perfil_view(request, user_username):
     context['is_perfil_active'] = True
     try:
         context['usuario'] = User.objects.get(username=user_username)
+        if (not request.user.is_superuser) and (not request.user.id == context['usuario'].id):
+            return HttpResponseRedirect('/')
     except User.DoesNotExist:
         context['usuario'] = None
-
-    return render(request, 'Perfil.html', context)
+        return HttpResponseRedirect('/')
 
     return render(request, 'Perfil.html', context)
 
