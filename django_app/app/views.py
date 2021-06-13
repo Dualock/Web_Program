@@ -27,7 +27,7 @@ def index(request):
 def estadios(request, pagina=1, per_page=5):
     context = getBaseContext(request=request)
     context['is_estadio_active'] = True
-    estadios = Paginator(Estadio.objects.all(),per_page)
+    estadios = Paginator(Estadio.objects.get_queryset().order_by('id'),per_page)
     try:
         context['estadios_disponibles'] = estadios.page(pagina)
     except EmptyPage:
