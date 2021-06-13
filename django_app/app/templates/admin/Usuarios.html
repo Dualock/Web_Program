@@ -59,7 +59,7 @@
         </h2>
       </div>
       <div id="agregar-usuario-body" class="hidden card-body">
-        <form action="/crearEstadio/" method="post">
+        <form action="/crearUsuarioAdmin/" method="post">
           {% csrf_token %}
           {{ admin_signup_form|crispy }}
           <div class="control-group">

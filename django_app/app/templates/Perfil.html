@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="fitted-box">
+  {% if usuario %}
+  <div class="card">
+    <div class="card-header">
+      <h1>
+        <small class="text-muted">{{ usuario.username }}</small>
+        {{ usuario.first_name }} {{ usuario.last_name }}
+        {% if usuario.is_staff %}
+        &nbsp;<span class="badge rounded-pill bg-secondary text-light">Staff</span>
+        {% endif %}
+        {% if usuario.is_superuser %}
+        &nbsp;<span class="badge rounded-pill bg-secondary text-light">Super Usuario</span>
+        {% endif %}</h1>
+    </div>
+
+    <div class="card-body">
+      {% if usuario.first_name or usuario.last_name %}
+      <span>{{ usuario.first_name }} {{ usuario.last_name }} | {{ usuario.email }}</span>
+      {% else %}
+      <span>{{ usuario.email }}</span>
+      {% endif %}
+      <br>
+      <span>Creado el {{ usuario.date_joined }}</span>
+      <br>
+      <span>Último login el {{ usuario.last_login }}</span>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

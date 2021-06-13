@@ -144,6 +144,82 @@ def admin(request):
 
     return render(request, 'Admin.html', context)
 
+def create_admin(request):
+    context = getBaseContext(request=request)
+    if not (context['isAuthenticated'] and (context['user'].is_staff or context['user'].is_superadmin)):
+        return HttpResponseRedirect('/')
+    context['is_admin_active'] = True
+    context['userList'] = True
+    context['create_estadio_form'] = CreateEstadioForm()
+    context['admin_signup_form'] = AdminSignupForm()
+    context['estadios_disponibles'] = Estadio.objects.all
+    context['usuarios_disponibles'] = User.objects.all
+    if request.method == 'POST':
+        context['formInputSentSignup'] = True
+        context['admin_signup_form'] = AdminSignupForm(request.POST)
+        if context['admin_signup_form'].is_valid():
+            try:
+                data = context['form'].cleaned_data
+                if User.objects.filter(email = data['email']).exists():
+                    context['error'] = "El email ya existe, debe ser único."
+                elif User.objects.filter(username = data['username']).exists():
+                    context['error'] = "El nombre de usuario ya existe, debe ser único."
+                else:
+                    user = User.objects.create_user(data['username'], data['email'], data['password'])
+                    user.first_name = data['nombre']
+                    user.last_name = data['apellido']
+                    if data['isStaff']:
+                        user.is_staff = True
+                    else:
+                        user.is_staff = False
+                    user.save()
+                    return HttpResponseRedirect('/perfil/%s' %user.username)
+            except Exception as e:
+                print("Error desconocido en Signup")
+                print(e)
+                context['error'] = 'Error desconocido'
+    return render(request, 'Admin.html', context)
+
+
+
+
+
+def create_estadio(request):
+    context = getBaseContext(request=request)
+    if not context['isAuthenticated'] or not context['user'].is_staff:
+        return HttpResponseRedirect('/')
+    if request.method == 'POST':
+        context['formInputSent'] = True
+        context['create_estadio_form'] = CreateEstadioForm(request.POST, request.FILES)
+        if context['create_estadio_form'].is_bound:
+            try:
+                data = request.POST
+                estadio = Estadio(nombre=data['nombre'], descripción=data['descripción'])
+                estadio.save()
+                print('estadio.id: %s' % estadio.id)
+                #u_file = request.FILES
+                #for s_file in u_file: print(s_file.name)
+                context['userCreated'] = True
+            except Exception as e:
+                print("Error desconocido en Creación de Estadio")
+                print(e)
+                context['error'] = 'Error desconocido'
+    else:
+        return HttpResponseRedirect('/')
+        # print(context)
+    return HttpResponseRedirect('/estadios/')
+
+def perfil_view(request, user_username):
+    context = getBaseContext(request=request)
+    context['is_perfil_active'] = True
+    try:
+        context['usuario'] = User.objects.get(username=user_username)
+    except User.DoesNotExist:
+        context['usuario'] = None
+
+    return render(request, 'Perfil.html', context)
+
+    return render(request, 'Perfil.html', context)
 
 def delete_estadio(request, estadio_id):
     context = getBaseContext(request=request)

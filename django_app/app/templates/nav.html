@@ -19,7 +19,7 @@
         </li>
         {% if isAuthenticated %}
         <li class="nav-item {% if is_perfil_active %}active{% endif %}">
-          <a class="nav-link text-uppercase text-expanded" href="#">Perfil</a>
+          <a class="nav-link text-uppercase text-expanded" href="/perfil/{{ user.username}}">Perfil</a>
         </li>
         {% endif %}
         {% if user.is_staff %}
