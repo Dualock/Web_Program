@@ -22,7 +22,7 @@
             {% for usuario in usuarios_disponibles %}
             <li class="list-group-item">
               <h3>
-                <a href="/perfil/{{ usuario.id }}/">{{ usuario.username }}</a>
+                <a href="/perfil/{{ usuario.username }}/">{{ usuario.username }}</a>
                 {% if usuario.is_staff %}
                 &nbsp;<span class="badge rounded-pill bg-secondary text-light">Staff</span>
                 {% endif %}
