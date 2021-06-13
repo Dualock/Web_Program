@@ -30,3 +30,11 @@ class CreateTipoAsientoForm(forms.Form):
     costo = forms.FloatField(label='Costo')
     capacidad = forms.IntegerField(label='Capacidad')
     descripción = forms.CharField(widget=forms.Textarea)
+
+#Cambios
+class CreateEventoForm(forms.Form):
+    fecha_hora = forms.CharField(label='Fecha')
+    equipo1 = forms.CharField(label='Equipo2')
+    equipo2 = forms.CharField(label='Equipo1')
+    descripción = forms.CharField(label = 'Tipo De Partido')
+#Fin Cambios

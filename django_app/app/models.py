@@ -33,6 +33,14 @@ class TipoAsiento(models.Model):
     costo = models.FloatField()
     capacidad = models.IntegerField()
     descripcion = models.TextField()
+#Cambios
+class CrearEvento(models.Model):
+    estadio = models.ForeignKey(Estadio, on_delete=models.CASCADE)
+    fecha_hora = models.CharField(max_length=200)
+    equipo1 = models.CharField(max_length=200)
+    equipo2 = models.CharField(max_length=200)
+    tipo = models.CharField(max_length=200)
+#Fin Cambios
 
 class Reserva(models.Model):
     partido = models.ForeignKey(Partido, on_delete=models.CASCADE)

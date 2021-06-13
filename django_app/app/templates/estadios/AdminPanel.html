@@ -4,9 +4,20 @@
   <div class="card-header no-selection">
     <h5>Crear Evento</h5>
   </div>
+  <!-- Cambios -->
   <div class="card-body">
-    <a class="btn btn-success" href="#">Crear Evento</a>
+    <form action="/CrearEvento/create/" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="estadio_id" value="{{ estadio.id }}">
+      {{ create_evento_form|crispy }}
+      <div class="control-group">
+        <div class="controls signup-form-btn">
+          <input class="btn btn-success" type="submit" value="Crear Evento">
+        </div>
+      </div>
+    </form>
   </div>
+    <!-- Fin Cambios -->
 </div>
 <br>
 <div class="card border-success">
