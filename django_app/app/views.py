@@ -159,7 +159,7 @@ def create_admin(request):
         context['admin_signup_form'] = AdminSignupForm(request.POST)
         if context['admin_signup_form'].is_valid():
             try:
-                data = context['form'].cleaned_data
+                data = context['admin_signup_form'].cleaned_data
                 if User.objects.filter(email = data['email']).exists():
                     context['error'] = "El email ya existe, debe ser único."
                 elif User.objects.filter(username = data['username']).exists():
