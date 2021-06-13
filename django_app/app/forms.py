@@ -32,9 +32,14 @@ class CreateTipoAsientoForm(forms.Form):
     descripción = forms.CharField(widget=forms.Textarea)
 
 #Cambios
-class CreateEventoForm(forms.Form):
-    fecha_hora = forms.CharField(label='Fecha')
-    equipo1 = forms.CharField(label='Equipo2')
-    equipo2 = forms.CharField(label='Equipo1')
-    descripción = forms.CharField(label = 'Tipo De Partido')
+# class CreateEventoForm(forms.Form):
+#     fecha_hora = forms.CharField(label='Fecha')
+#     equipo1 = forms.CharField(label='Equipo2')
+#     equipo2 = forms.CharField(label='Equipo1')
+#     tipo = forms.CharField(label = 'Tipo De Partido')
 #Fin Cambios
+
+class CreatePartidoForm(forms.Form):
+    nombre = forms.CharField(label='Nombre')
+    inicio = forms.DateTimeField(label="Inicio", widget=forms.widgets.DateInput(attrs={'type': 'datetime-local'}))
+    fin = forms.DateTimeField(label="Fin", widget=forms.widgets.DateInput(attrs={'type': 'datetime-local'}))

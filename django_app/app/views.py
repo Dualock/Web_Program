@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import EmptyPage, Paginator
 
 from .models import Estadio, TipoAsiento, CrearEvento
-from .forms import CreateTipoAsientoForm, LoginForm, SignupForm, CreateEstadioForm, AdminSignupForm, CreateEventoForm
+from .forms import *
 
 def getBaseContext(request):
     context = {
@@ -43,7 +43,7 @@ def estadio(request, estadio_id):
     context['is_estadio_active'] = True
     if request.user.is_authenticated:
         context['create_tipo_asiento_form'] = CreateTipoAsientoForm()
-        context['create_evento_form'] = CreateEventoForm()
+        context['create_evento_form'] = CreatePartidoForm()
     try:
         context['estadio'] = Estadio.objects.get(id=estadio_id)
         context['tipo_asientos_disponibles'] = TipoAsiento.objects.filter(estadio=estadio_id)
@@ -147,7 +147,7 @@ def admin(request):
     context['estadios_disponibles'] = Estadio.objects.all
     context['usuarios_disponibles'] = User.objects.all
     context['create_tipo_asiento_form'] = CreateTipoAsientoForm()
-    context['create_evento_form'] = CreateEventoForm()
+    context['create_evento_form'] = CreatePartidoForm()
 
     return render(request, 'Admin.html', context)
 
@@ -277,19 +277,19 @@ def create_event(request):
         return HttpResponseRedirect('/')
     if request.method == 'POST':
         context['formInputSent'] = True
-        context['create_evento_form'] = CreateEventoForm(request.POST)
+        context['create_evento_form'] = CreatePartidoForm(request.POST)
         if context['create_evento_form'].is_valid():
             try:
                 data = context['create_evento_form'].cleaned_data
                 estadio = Estadio.objects.all().get(id=request.POST['estadio_id'])
-                CrearEvento = CrearEvento(
+                crearEvento = CrearEvento(
                     estadio=estadio,
                     fecha_hora=data['fecha_hora'],
                     equipo1=data['equipo1'],
                     equipo2=data['equipo2'],
                     tipo=data['tipo']
                 )
-                CrearEvento.save()
+                crearEvento.save()
                 context['EventoCreated'] = True
             except Exception as e:
                 print("Error desconocido en Creación del evento")
