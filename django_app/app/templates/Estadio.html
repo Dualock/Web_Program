@@ -22,6 +22,15 @@
         </div>
         <div id="eventos-body" class="card-body hidden">
           Eventos del estadio
+          {% for partido in eventos_creados %}
+          <li class="list-group-item">
+            <h2>
+              {{ partido.nombre }}
+            </h2>
+            <p>Comienza: {{ partido.inicio }}</p>
+            <p>Termina: {{ partido.fin }}</p>
+          </li>
+          {% endfor %}
         </div>
       </div>
 
