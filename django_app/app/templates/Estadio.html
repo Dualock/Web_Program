@@ -23,6 +23,24 @@
         </div>
       </div>
 
+      <br>
+
+      <div class="card">
+        <div id="tipo-asientos-header" class="card-header cursor no-selection">
+          <h2>Tipos de Asiento</h2>
+        </div>
+        <div id="tipo-asientos-body" class="card-body hidden">
+          {% for tipoAsiento in tipo_asientos_disponibles %}
+          <li class="list-group-item">
+            <h2>
+              {{ tipoAsiento.nombre }}
+            </h2>
+            <p>{{ tipoAsiento.descripcion }}</p>
+          </li>
+          {% endfor %}
+        </div>
+      </div>
+
       {% if isAuthenticated and user.is_staff %}
       <br>
       <div class="card">
@@ -46,16 +64,19 @@
 {% endblock %}
 
 {% block end %}
-{% if isAuthenticated and user.is_staff %}
 <script>
-  $(document).ready(function () {
+$(document).ready(function () {
+  $("#eventos-header").click(function () {
+    $("#eventos-body").toggle();
+  });
+  $("#tipo-asientos-header").click(function () {
+      $("#tipo-asientos-body").toggle();
+    });
+{% if isAuthenticated and user.is_staff %}
     $("#admin-panel-header").click(function () {
       $("#admin-panel-body").toggle();
     });
-    $("#eventos-header").click(function () {
-      $("#eventos-body").toggle();
-    });
-  });
-</script>
 {% endif %}
+});
+</script>
 {% endblock %}

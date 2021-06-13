@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import EmptyPage, Paginator
 
 from .models import Estadio, TipoAsiento
-from .forms import LoginForm, SignupForm, CreateEstadioForm, AdminSignupForm
+from .forms import CreateTipoAsientoForm, LoginForm, SignupForm, CreateEstadioForm, AdminSignupForm
 
 def getBaseContext(request):
     context = {
@@ -41,8 +41,11 @@ def estadios(request, pagina=1, per_page=5):
 def estadio(request, estadio_id):
     context = getBaseContext(request=request)
     context['is_estadio_active'] = True
+    if request.user.is_authenticated:
+        context['create_tipo_asiento_form'] = CreateTipoAsientoForm()
     try:
         context['estadio'] = Estadio.objects.get(id=estadio_id)
+        context['tipo_asientos_disponibles'] = TipoAsiento.objects.filter(estadio=estadio_id)
     except Estadio.DoesNotExist:
         context['estadio'] = None
 
@@ -141,6 +144,7 @@ def admin(request):
     context['admin_signup_form'] = AdminSignupForm()
     context['estadios_disponibles'] = Estadio.objects.all
     context['usuarios_disponibles'] = User.objects.all
+    context['create_tipo_asiento_form'] = CreateTipoAsientoForm()
 
     return render(request, 'Admin.html', context)
 
@@ -234,3 +238,32 @@ def delete_estadio(request, estadio_id):
         print('ERROR: estadio no borrado')
 
     return HttpResponseRedirect('/estadios')
+
+def create_tipo_asiento(request):
+    context = getBaseContext(request=request)
+    if not context['isAuthenticated'] or not context['user'].is_staff:
+        return HttpResponseRedirect('/')
+    if request.method == 'POST':
+        context['formInputSent'] = True
+        context['create_tipo_asiento_form'] = CreateTipoAsientoForm(request.POST)
+        if context['create_tipo_asiento_form'].is_valid():
+            try:
+                data = context['create_tipo_asiento_form'].cleaned_data
+                estadio = Estadio.objects.all().get(id=request.POST['estadio_id'])
+                tipoAsiento = TipoAsiento(
+                    estadio=estadio,
+                    nombre=data['nombre'],
+                    costo=data['costo'],
+                    capacidad=data['capacidad'],
+                    descripcion=data['descripción']
+                )
+                tipoAsiento.save()
+                context['tipoAsientoCreated'] = True
+            except Exception as e:
+                print("Error desconocido en Creación de Tipo de Asiento")
+                print(e)
+                context['error'] = 'Error desconocido'
+    else:
+        return HttpResponseRedirect('/')
+        # print(context)
+    return HttpResponseRedirect('/estadios/')

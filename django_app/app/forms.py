@@ -1,4 +1,5 @@
 from django import forms
+from .models import *
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Usuario', max_length=100)
@@ -22,4 +23,10 @@ class AdminSignupForm(forms.Form):
 
 class CreateEstadioForm(forms.Form):
     nombre = forms.CharField(label='Nombre', max_length=100)
+    descripción = forms.CharField(widget=forms.Textarea)
+
+class CreateTipoAsientoForm(forms.Form):
+    nombre = forms.CharField(label='Nombre', max_length=200)
+    costo = forms.FloatField(label='Costo')
+    capacidad = forms.IntegerField(label='Capacidad')
     descripción = forms.CharField(widget=forms.Textarea)

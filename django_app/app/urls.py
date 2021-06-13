@@ -15,5 +15,6 @@ urlpatterns = [
     path('admin/', views.admin, name='admin'),
     path('crearEstadio/', views.create_estadio, name='crear_estadio'),
     path('perfil/<str:user_username>/', views.perfil_view, name = 'perfil'),
-    path('crearUsuarioAdmin/', views.create_admin, name = 'crear_user_admin')
+    path('crearUsuarioAdmin/', views.create_admin, name = 'crear_user_admin'),
+    path('tipoAsiento/create/', views.create_tipo_asiento, name = 'crear_tipo_asiento'),
 ]
