@@ -278,23 +278,28 @@ def create_event(request):
     if request.method == 'POST':
         context['formInputSent'] = True
         context['create_partido_form'] = CreatePartidoForm(request.POST)
+        print (context['create_partido_form'].is_valid())
         if context['create_partido_form'].is_valid():
+
             try:
                 data = context['create_partido_form'].cleaned_data
                 estadio = Estadio.objects.all().get(id=request.POST['estadio_id'])
-                Partido = Partido(
+                partido = Partido(
                     estadio=estadio,
-                    nombre=data['nompre_evento'],
-                    inicio=data['inicio_tiempo'],
-                    fin=data['fin_tiempo']
+                    nombre=data['nombre'],
+                    inicio=data['inicio'],
+                    fin=data['fin']
                 )
-                Partido.save()
+
+                partido.save()
                 context['EventoCreated'] = True
             except Exception as e:
                 print("Error desconocido en Creación del evento")
                 print(e)
                 context['error'] = 'Error desconocido'
     else:
+        #ValidationError(_('Invalid value'), code='invalid')
+        print(forms.errors)
         return HttpResponseRedirect('/')
         # print(context)
     return HttpResponseRedirect('/estadios/')

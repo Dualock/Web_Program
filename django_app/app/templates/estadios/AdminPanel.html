@@ -9,7 +9,7 @@
     <form action="/CrearEvento/create/" method="post">
       {% csrf_token %}
       <input type="hidden" name="estadio_id" value="{{ estadio.id }}">
-      {{ create_evento_form|crispy }}
+      {{ create_partido_form|crispy }}
       <div class="control-group">
         <div class="controls signup-form-btn">
           <input class="btn btn-success" type="submit" value="Crear Evento">
