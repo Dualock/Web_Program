@@ -4,74 +4,26 @@
 
 <div class="fitted-box">
 
-
   {% if estadio %}
   <div class="card">
     <div class="card-header">
       <h1><small class="text-muted">Estadio</small> {{ estadio.nombre }}</h1>
     </div>
-
+    {% if not EventoCreated and error %}
     <div class="card-body">
-      <p>{{ estadio.descripción }}</p>
-
-
-
-      <div class="card">
-        <div id="eventos-header" class="card-header cursor no-selection">
-          <h2>Eventos</h2>
-        </div>
-        <div id="eventos-body" class="card-body hidden">
-          Eventos del estadio
-          {% for partido in eventos_creados %}
-          <li class="list-group-item">
-            <h2>
-              {{ partido.nombre }}
-            </h2>
-            <p>Comienza: {{ partido.inicio }}</p>
-            <p>Termina: {{ partido.fin }}</p>
-          </li>
-          {% endfor %}
-        </div>
-      </div>
-
-      <br>
-
-      <div class="card">
-        <div id="tipo-asientos-header" class="card-header cursor no-selection">
-          <h2>Tipos de Asiento</h2>
-        </div>
-        <div id="tipo-asientos-body" class="card-body hidden">
-          {% for tipoAsiento in tipo_asientos_disponibles %}
-          <li class="list-group-item">
-            <h2>
-              {{ tipoAsiento.nombre }}
-            </h2>
-            <p>{{ tipoAsiento.descripcion }}</p>
-          </li>
-          {% endfor %}
-        </div>
-      </div>
-
-
-      {% if isAuthenticated and user.is_staff %}
-      <br>
-      <div class="card">
-        <div id="admin-panel-header" class="card-header cursor no-selection">
-          <h2>Panel Administrativo</h2>
-        </div>
-        <div id="admin-panel-body" class="card-body hidden">
-          {% include "estadios/AdminPanel.html" %}
-        </div>
-      </div>
-      {% endif %}
-      {% else %}
-      <div class="alert alert-danger">Estadio no encontrado.</div>
-      <a class="btn btn-secondary" href="/estadios">Regresar a la Lista de Estadios</a>
-      {% endif %}
-
+      <div class="alert alert-danger">Evento no creado: {{ error }}</div>
+      <a class="btn btn-secondary" href="/estadio/{{ estadio.id }}">Regresar al Estadio</a>
     </div>
+    {% else %}
+    {% include 'estadios/DatosEstadio.html' %}
+    {% endif %}
+
 
   </div>
+  {% else %}
+  <div class="alert alert-danger">Estadio no encontrado.</div>
+  <a class="btn btn-secondary" href="/estadios">Regresar a la Lista de Estadios</a>
+  {% endif %}
 </div>
 {% endblock %}
 
