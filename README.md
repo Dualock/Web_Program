@@ -1,8 +1,7 @@
-# Voronoi Diagrams - C++
+# Reserva de Espacios en Partidos
 ## IE724 Laboratory of programming and microcomputers, EIE, University of Costa Rica
 ## Rojas Emilio, Fonseca Dualock
 ## emilio.jrojas@ucr.ac.cr, dualok.fonseca@ucr.ac.cr
-First attemp to introduce ourselves to web development
 
 # Description
 Creacion de un sitio Web para reservar espacios en un estadio de futbol.
