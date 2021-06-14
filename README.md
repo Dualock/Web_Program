@@ -1,5 +1,15 @@
-# Web_Program
+# Voronoi Diagrams - C++
+## IE724 Laboratory of programming and microcomputers, EIE, University of Costa Rica
+## Rojas Emilio, Fonseca Dualock
+## emilio.jrojas@ucr.ac.cr, dualok.fonseca@ucr.ac.cr
 First attemp to introduce ourselves to web development
+
+# Description
+Creacion de un sitio Web para reservar espacios en un estadio de futbol.
+Dicho sitio web cuenta con posibilidad de crear usuarios administradores o
+"staff" los cuales pueden administrar la pagina facilmente desde el mismo sitio
+y tambien usuarios normale, cuenta con un espacio para log in y para reservar asientos, tambien
+tiene una seccion para acceder al perfil
 
 ## Diagrama de Modelos del Proyecto
 
@@ -55,4 +65,26 @@ lsof -i -P -n # Revisar procesos en puertos
 python3 manage.py makemigrations app
 python3 manage.py sqlmigrate app 0001
 python3 manage.py migrate
+```
+
+###Compilacion y ejecucion automatica
+Desde la carpeta Web_program
+Ejecutar docker.sh para realizar la instalacion automatica de docker:
+```
+bash docker.sh
+```
+Desde la carpeta Web_program
+Ejecutar config1.sh al para crear y correr la imagen de docker
+```
+bash config1.sh
+```
+
+Una vez dentro ejecutar el siguiente comando:
+```
+bash home/proyecto2/config2.sh
+```
+
+Una vez dentro de la imagen se ejecuta
+```
+bash /home/proyecto2/config2.sh
 ```
