@@ -26,6 +26,7 @@ COPY django_app /home/proyecto2
 
 # Alistar base de datos
 RUN  python3 /home/proyecto2/manage.py migrate
+RUN  bash /home/proyecto2/createsuperuser.sh
 
 # Habilitar el puerto 8000
 EXPOSE 8000

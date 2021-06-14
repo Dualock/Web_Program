@@ -43,11 +43,12 @@ correr:
 ```
 docker run -p 8000:8000 -ti proyecto2 /bin/bash
 ```
-
-Para crear un superusuario(requerido para acceder al panel de administrador):
+Por defecto se crea un superusuario con nombre de usuario admin y contraseña admin.
+Para crear un nuevo superusuario:
 ```
 python3 /home/proyecto2/manage.py createsuperuser # seguir las instrucciones
 ```
+Con este nuevo superusuario se puede eliminar al superusuario por defecto.
 
 Para iniciar el servidor, correr:
 ```
