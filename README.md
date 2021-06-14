@@ -25,7 +25,7 @@ pip3 install django-crispy-forms
 ```
 ### Ejecución
 ```
-python3 manage.py migrations             # inicializar base de datos.
+python3 manage.py migrate                # inicializar base de datos.
 python3 manage.py createsuperuser        # crear superusuario inicial.
 python3 manage.py runserver 0.0.0.0:8000 # ejecutar servidor.
 ```
