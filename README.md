@@ -41,6 +41,13 @@ correr:
 ```
 docker run -p 8000:8000 -ti proyecto2 /bin/bash
 ```
+
+Para crear un superusuario(requerido para acceder al panel de administrador):
+```
+# Iniciar el servidor
+python3 /home/proyecto2/manage.py createsuperuser # seguir las instrucciones
+```
+
 Para iniciar el servidor, correr:
 ```
 # Iniciar el servidor
