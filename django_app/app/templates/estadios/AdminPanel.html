@@ -6,7 +6,7 @@
   </div>
   <!-- Cambios -->
   <div class="card-body">
-    <form action="/CrearEvento/create/" method="post">
+    <form action="/partido/create/" method="post">
       {% csrf_token %}
       <input type="hidden" name="estadio_id" value="{{ estadio.id }}">
       {{ create_partido_form|crispy }}

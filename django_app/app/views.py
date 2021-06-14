@@ -279,7 +279,7 @@ def create_tipo_asiento(request):
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
-def create_event(request):
+def create_partido(request):
     request.session['django_timezone'] = "America/Costa_Rica"
     context = getBaseContext(request=request)
     context['EventoCreated'] = False
