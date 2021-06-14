@@ -42,3 +42,4 @@ class Reserva(models.Model):
     partido = models.ForeignKey(Partido, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     tipoAsiento = models.ForeignKey(TipoAsiento, on_delete=models.CASCADE)
+    cantidad_espacios_reservados = models.IntegerField()

@@ -31,6 +31,9 @@ class CreateTipoAsientoForm(forms.Form):
     capacidad = forms.IntegerField(label='Capacidad')
     descripción = forms.CharField(widget=forms.Textarea)
 
+class CreateReservaForm(forms.Form):
+    cantidad = forms.IntegerField(label='Cantidad de asientos')
+
 #Cambios
 # class CreateEventoForm(forms.Form):
 #     fecha_hora = forms.CharField(label='Fecha')

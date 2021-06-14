@@ -51,6 +51,7 @@ def estadio(request, estadio_id):
     if request.user.is_authenticated:
         context['create_tipo_asiento_form'] = CreateTipoAsientoForm()
         context['create_partido_form'] = CreatePartidoForm()
+        context['create_reserva_form'] = CreateReservaForm()
     try:
         context['estadio'] = Estadio.objects.get(id=estadio_id)
         context['tipo_asientos_disponibles'] = TipoAsiento.objects.filter(estadio=estadio_id)
@@ -393,28 +394,33 @@ def create_reserva(request):
         return HttpResponseRedirect('/login')
     if request.method == 'POST':
         context['formInputSent'] = True
-        try:
-            data = request.POST
-            partido = Partido.objects.all().get(id=data['partido_id'])
-            user = User.objects.all().get(id=data['user_id'])
-            tipoAsiento = TipoAsiento.objects.all().get(id=data['tipo_asiento_id'])
-            reserva = Reserva(partido=partido, user=user, tipoAsiento=tipoAsiento)
-            print(reserva)
-            reserva.save()
-            context['ReservaCreated'] = True
-        except ValueError as e:
-            print("Error ValueError en Reserva del partido")
-            print(e)
-            context['error'] = e
-        except Exception as e:
-            context['error'] = 'Error desconocido'
-            print("Error en Reserva del partido")
-            print(e)
-        finally:
-            if (not context['ReservaCreated']):
-                return render(request, 'Estadio.html', context)
-            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        context['create_reserva_form'] = CreateReservaForm(request.POST)
+        if context['create_reserva_form'].is_valid():
+            try:
+                data = request.POST
+                partido = Partido.objects.all().get(id=data['partido_id'])
+                user = User.objects.all().get(id=data['user_id'])
+                tipoAsiento = TipoAsiento.objects.all().get(id=data['tipo_asiento_id'])
+                reserva = Reserva(partido=partido, user=user, tipoAsiento=tipoAsiento,
+                                    cantidad_espacios_reservados = data['cantidad_espacios_reservados'])
+                print(reserva)
+                reserva.save()
+                context['ReservaCreated'] = True
+            except ValueError as e:
+                print("Error ValueError en Reserva del partido")
+                print(e)
+                context['error'] = e
+            except Exception as e:
+                context['error'] = 'Error desconocido'
+                print("Error en Reserva del partido")
+                print(e)
+            finally:
+                if (not context['ReservaCreated']):
+                    return render(request, 'Estadio.html', context)
+                return HttpResponseRedirect(request.META['HTTP_REFERER'])
     else:
+        print(cantidad_espacios_reservados)
+        print(request.POST['cantidad_reservados'])
         print(forms.errors)
         return HttpResponseRedirect('/')
 

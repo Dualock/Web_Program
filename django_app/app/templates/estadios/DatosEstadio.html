@@ -31,12 +31,25 @@
               {% endfor %}
             </select>
           </div>
+          <!-- Cambios-->
+        <!-- <label for="reserva.cantidad_espacios_reservados">Cantidad De asientos</label>
+          <select name="cantidad_reservados" class="select control-input" required="" id="{{ reserva.cantidad_espacios_reservados }}">
+            <option value="" selected="">0</option>
+            {% for i in '123456789'|make_list %}
+            <option value="{{ reserva.cantidad_espacios_reservados }}">{{ i }}</option>
+            {% endfor %}
+
+          </select>-->
+          <div class="card-body">
+            <form action="/reserva/create/" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="estadio_id" value="{{ estadio.id }}">
+              {{ create_reserva_form|crispy }}<br>
+            <!-- Fin Cambios-->
           <div class="control-group">
             <input type="submit" class="btn btn-success" value="Hacer Reserva">
           </div>
         </form>
-
-
           <!-- SI EXISTE LA RESERVA
           <a class="btn btn-primary">Ver Reserva</a>
 
