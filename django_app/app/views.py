@@ -54,7 +54,7 @@ def estadio(request, estadio_id):
     try:
         context['estadio'] = Estadio.objects.get(id=estadio_id)
         context['tipo_asientos_disponibles'] = TipoAsiento.objects.filter(estadio=estadio_id)
-        context['eventos_creados'] = Partido.objects.filter(estadio = estadio_id)
+        context['partidos_creados'] = Partido.objects.filter(estadio = estadio_id)
     except Estadio.DoesNotExist:
         context['estadio'] = None
 
@@ -124,25 +124,6 @@ def log_out(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-def eventos(request):
-    context = getBaseContext(request=request)
-    context['is_eventos_active'] = True
-    return render(request, 'Eventos.html', context)
-
-def yo(request):
-    context = getBaseContext(request=request)
-    context['is_perfil_active'] = True
-    if not context['isAuthenticated']:
-        return HttpResponseRedirect('/')
-    return render(request, 'Eventos.html', context)
-
-def perfil(request):
-    context = getBaseContext(request=request)
-    context['is_perfil_active'] = True
-    if not context['isAuthenticated']:
-        return HttpResponseRedirect('/')
-    return render(request, 'Eventos.html', context)
-
 def admin(request):
     context = getBaseContext(request=request)
     if not (context['isAuthenticated'] and (context['user'].is_staff or context['user'].is_superadmin)):
@@ -194,10 +175,6 @@ def create_admin(request):
                 context['error'] = 'Error desconocido'
     return render(request, 'Admin.html', context)
 
-
-
-
-
 def create_estadio(request):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
@@ -226,6 +203,9 @@ def create_estadio(request):
 def perfil_view(request, user_username):
     context = getBaseContext(request=request)
     context['is_perfil_active'] = True
+    context['reservas_disponibles'] = Reserva.objects.filter(user__username=user_username)
+    print("context['reservas_disponibles']")
+    print(context['reservas_disponibles'])
     try:
         context['usuario'] = User.objects.get(username=user_username)
         if (not request.user.is_superuser) and (not request.user.id == context['usuario'].id):
@@ -282,7 +262,7 @@ def create_tipo_asiento(request):
 def create_partido(request):
     request.session['django_timezone'] = "America/Costa_Rica"
     context = getBaseContext(request=request)
-    context['EventoCreated'] = False
+    context['PartidoCreated'] = False
     if not context['isAuthenticated'] or not context['user'].is_staff:
         return HttpResponseRedirect('/')
     if request.method == 'POST':
@@ -296,7 +276,7 @@ def create_partido(request):
                 inicio = datetime.datetime.strptime(request.POST['inicio'], "%Y-%m-%d %H:%M") + tztimedelta
                 fin = datetime.datetime.strptime(request.POST['fin'], "%Y-%m-%d %H:%M") + tztimedelta
                 if (inicio >= fin):
-                    raise ValueError('El fin del evento debe ser después del inicio')
+                    raise ValueError('El fin del partido debe ser después del inicio')
                 partido = Partido(
                     estadio=estadio,
                     nombre=data['nombre'],
@@ -305,35 +285,35 @@ def create_partido(request):
                 )
                 print(partido)
                 partido.save()
-                context['EventoCreated'] = True
+                context['PartidoCreated'] = True
             except ValueError as e:
-                print("Error ValueError en Creación del evento")
+                print("Error ValueError en Creación del partido")
                 print(e)
                 context['error'] = e
                 if (str(e).find("time data") != -1 and str(e).find("does not match format") != -1):
                     context['error'] = "Formato de fecha incorrecto: usar '%Y-%m-%d %H:%M', por ejemplo 2021-01-20 14:00"
             except Exception as e:
                 context['error'] = 'Error desconocido'
-                print("Error en Creación del evento")
+                print("Error en Creación del partido")
                 print(e)
             finally:
-                if (not context['EventoCreated']):
+                if (not context['PartidoCreated']):
                     return render(request, 'Estadio.html', context)
                 return HttpResponseRedirect(request.META['HTTP_REFERER'])
     else:
         print(forms.errors)
         return HttpResponseRedirect('/')
 
-def delete_partido(request, evento_id):
+def delete_partido(request, partido_id):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
         return HttpResponseRedirect('/')
 
     try:
-        Partido.objects.get(id=evento_id).delete()
-        print('evento borrado')
+        Partido.objects.get(id=partido_id).delete()
+        print('partido borrado')
     except Partido.DoesNotExist:
-        print('ERROR: evento no borrado')
+        print('ERROR: partido no borrado')
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
@@ -404,3 +384,59 @@ def remove_staff_user(request, user_id):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
     except KeyError as e:
         return HttpResponseRedirect("/admin")
+
+
+def create_reserva(request):
+    context = getBaseContext(request=request)
+    context['ReservaCreated'] = False
+    if not context['isAuthenticated']:
+        return HttpResponseRedirect('/login')
+    if request.method == 'POST':
+        context['formInputSent'] = True
+        try:
+            data = request.POST
+            partido = Partido.objects.all().get(id=data['partido_id'])
+            user = User.objects.all().get(id=data['user_id'])
+            tipoAsiento = TipoAsiento.objects.all().get(id=data['tipo_asiento_id'])
+            reserva = Reserva(partido=partido, user=user, tipoAsiento=tipoAsiento)
+            print(reserva)
+            reserva.save()
+            context['ReservaCreated'] = True
+        except ValueError as e:
+            print("Error ValueError en Reserva del partido")
+            print(e)
+            context['error'] = e
+        except Exception as e:
+            context['error'] = 'Error desconocido'
+            print("Error en Reserva del partido")
+            print(e)
+        finally:
+            if (not context['ReservaCreated']):
+                return render(request, 'Estadio.html', context)
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    else:
+        print(forms.errors)
+        return HttpResponseRedirect('/')
+
+def delete_reserva(request, reserva_id):
+    context = getBaseContext(request=request)
+    reserva = None
+    try:
+        reserva = Reserva.objects.get(id=reserva_id)
+    except User.DoesNotExist:
+        print('ERROR: reserva no encontrada')
+        try:
+            print(request.META['HTTP_REFERER'])
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        except KeyError as e:
+            return HttpResponseRedirect("/perfil")
+
+    if (not context['isAuthenticated'] or not context['user'].is_staff) and (context['user'].id != reserva.user.id):
+        return HttpResponseRedirect('/')
+    reserva.delete()
+    print('reserva borrada')
+    try:
+        print(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    except KeyError as e:
+        return HttpResponseRedirect("/perfil")

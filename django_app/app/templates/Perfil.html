@@ -35,6 +35,40 @@
         {% endif %}
         <a class="btn btn-danger" href="/user/delete/{{ usuario.id }}">Eliminar Usuario</a>
       {% endif %}
+      <div class="card">
+        <div class="card-header">
+          <h2>Reservas</h2>
+        </div>
+        <div class="card-body">
+          {% if reservas_disponibles %}
+          <ul class="list-group-flush">
+            {% for reserva in reservas_disponibles %}
+              <li class="list-group-item">
+                <h3>
+                  <small class="text-muted">Partido</small>
+                  {{ reserva.partido.nombre }}
+                </h3>
+                <h4>
+                  <small class="text-muted">Estadio</small>
+                  {{ reserva.partido.estadio.nombre }}
+                </h4>
+                <h4>
+                  <small class="text-muted">Tipo de Asiento</small>
+                  {{ reserva.tipoAsiento.nombre }}
+                </h4>
+                <h4>
+                  <small class="text-muted">Costo</small>
+                  {{ reserva.tipoAsiento.costo }}
+                </h4>
+                <a class="btn btn-danger" href="/reserva/delete/{{ reserva.id }}">Eliminar Reserva</a>
+              </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <div class="alert alert-primary">No exiten reservas.</div>
+          {% endif %}
+        </div>
+      </div>
     </div>
     {% endif %}
   </div>

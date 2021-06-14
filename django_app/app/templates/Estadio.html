@@ -9,9 +9,14 @@
     <div class="card-header">
       <h1><small class="text-muted">Estadio</small> {{ estadio.nombre }}</h1>
     </div>
-    {% if not EventoCreated and error %}
+    {% if not PartidoCreated and error %}
     <div class="card-body">
-      <div class="alert alert-danger">Evento no creado: {{ error }}</div>
+      {% if not PartidoCreated %}
+        <div class="alert alert-danger">Partido no creado: {{ error }}</div>
+      {% endif %}
+      {% if not ReservaCreated %}
+        <div class="alert alert-danger">Reserva no creado: {{ error }}</div>
+      {% endif %}
       <a class="btn btn-secondary" href="/estadio/{{ estadio.id }}">Regresar al Estadio</a>
     </div>
     {% else %}
@@ -30,8 +35,8 @@
 {% block end %}
 <script>
 $(document).ready(function () {
-  $("#eventos-header").click(function () {
-    $("#eventos-body").toggle();
+  $("#partidos-header").click(function () {
+    $("#partidos-body").toggle();
   });
   $("#tipo-asientos-header").click(function () {
       $("#tipo-asientos-body").toggle();
