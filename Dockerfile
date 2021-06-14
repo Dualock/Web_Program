@@ -24,5 +24,8 @@ RUN pip3 install django-crispy-forms
 RUN mkdir -p /home/proyecto2
 COPY django_app /home/proyecto2
 
+# Alistar base de datos
+RUN  python3 /home/proyecto2/manage.py migrate
+
 # Habilitar el puerto 8000
 EXPOSE 8000
