@@ -20,4 +20,7 @@ urlpatterns = [
     path('CrearEvento/create/', views.create_event, name = 'crear_event'),
     path('partido/delete/<int:evento_id>', views.delete_partido, name = 'delete_partido'),
     path('tipoAsiento/delete/<int:tipo_asiento_id>', views.delete_tipo_asiento, name = 'delete_tipo_asiento'),
+    path('user/delete/<int:user_id>', views.delete_user, name = 'delete_user'),
+    path('user/makestaff/<int:user_id>', views.make_staff_user, name = 'make_staff_user'),
+    path('user/removestaff/<int:user_id>', views.remove_staff_user, name = 'remove_staff_user'),
 ]

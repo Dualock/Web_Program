@@ -351,3 +351,58 @@ def delete_tipo_asiento(request, tipo_asiento_id):
         print('ERROR: tipo de asiento no borrado')
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+def delete_user(request, user_id):
+    context = getBaseContext(request=request)
+    if not context['isAuthenticated'] or not context['user'].is_staff:
+        return HttpResponseRedirect('/')
+
+    try:
+        User.objects.get(id=user_id).delete()
+        print('usuario borrado')
+    except User.DoesNotExist:
+        print('ERROR: usuario no borrado')
+
+    try:
+        print(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    except KeyError as e:
+        return HttpResponseRedirect("/admin")
+
+def make_staff_user(request, user_id):
+    context = getBaseContext(request=request)
+    if not context['isAuthenticated'] or not context['user'].is_staff:
+        return HttpResponseRedirect('/')
+
+    try:
+        user = User.objects.get(id=user_id)
+        user.is_staff = True
+        user.save()
+        print('usuario hecho staff')
+    except User.DoesNotExist:
+        print('ERROR: usuario no hecho staff')
+
+    try:
+        print(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    except KeyError as e:
+        return HttpResponseRedirect("/admin")
+
+def remove_staff_user(request, user_id):
+    context = getBaseContext(request=request)
+    if not context['isAuthenticated'] or not context['user'].is_staff:
+        return HttpResponseRedirect('/')
+
+    try:
+        user = User.objects.get(id=user_id)
+        user.is_staff = False
+        user.save()
+        print('usuario removido de staff')
+    except User.DoesNotExist:
+        print('ERROR: usuario no removido de staff')
+
+    try:
+        print(request.META['HTTP_REFERER'])
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    except KeyError as e:
+        return HttpResponseRedirect("/admin")

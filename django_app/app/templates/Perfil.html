@@ -26,6 +26,15 @@
       <span>Creado el {{ usuario.date_joined }}</span>
       <br>
       <span>Último login el {{ usuario.last_login }}</span>
+      {% if isAuthenticated and user.is_staff %}
+        <br>
+        {% if not usuario.is_staff %}
+        <a class="btn btn-secondary" href="/user/makestaff/{{ usuario.id }}">Hacer Staff</a>
+        {% else %}
+        <a class="btn btn-secondary" href="/user/removestaff/{{ usuario.id }}">Quitar Staff</a>
+        {% endif %}
+        <a class="btn btn-danger" href="/user/delete/{{ usuario.id }}">Eliminar Usuario</a>
+      {% endif %}
     </div>
     {% endif %}
   </div>
