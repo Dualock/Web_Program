@@ -302,4 +302,28 @@ def create_event(request):
         print(forms.errors)
         return HttpResponseRedirect('/')
         # print(context)
-    return HttpResponseRedirect('/estadios/')
+def delete_partido(request, evento_id):
+    context = getBaseContext(request=request)
+    if not context['isAuthenticated'] or not context['user'].is_staff:
+        return HttpResponseRedirect('/')
+
+    try:
+        Partido.objects.get(id=evento_id).delete()
+        print('evento borrado')
+    except Partido.DoesNotExist:
+        print('ERROR: evento no borrado')
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+def delete_tipo_asiento(request, tipo_asiento_id):
+    context = getBaseContext(request=request)
+    if not context['isAuthenticated'] or not context['user'].is_staff:
+        return HttpResponseRedirect('/')
+
+    try:
+        TipoAsiento.objects.get(id=tipo_asiento_id).delete()
+        print('tipo de asiento borrado')
+    except TipoAsiento.DoesNotExist:
+        print('ERROR: tipo de asiento no borrado')
+
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
