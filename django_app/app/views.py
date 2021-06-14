@@ -1,14 +1,21 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+# from datetime import timedelta
+import datetime
+
+from django.utils.dateparse import parse_datetime
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 from django.core.paginator import EmptyPage, Paginator
 
-from .models import Estadio, TipoAsiento, Partido
+from .models import *
 from .forms import *
+
+# Delta de tiempos para corregir horas
+tztimedelta = datetime.timedelta(hours=6, minutes=00)
 
 def getBaseContext(request):
     context = {
@@ -269,39 +276,56 @@ def create_tipo_asiento(request):
     else:
         return HttpResponseRedirect('/')
         # print(context)
-    return HttpResponseRedirect('/estadios/')
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
 
 def create_event(request):
+    request.session['django_timezone'] = "America/Costa_Rica"
     context = getBaseContext(request=request)
+    context['EventoCreated'] = False
     if not context['isAuthenticated'] or not context['user'].is_staff:
         return HttpResponseRedirect('/')
     if request.method == 'POST':
         context['formInputSent'] = True
         context['create_partido_form'] = CreatePartidoForm(request.POST)
-        print (context['create_partido_form'].is_valid())
-        if context['create_partido_form'].is_valid():
+        if context['create_partido_form'].is_valid() or context['create_partido_form'].is_bound:
 
             try:
                 data = context['create_partido_form'].cleaned_data
+                print(data)
+                print(request.POST['inicio'])
+                print(request.POST['fin'])
                 estadio = Estadio.objects.all().get(id=request.POST['estadio_id'])
+                context['estadio'] = estadio
+                inicio = datetime.datetime.strptime(request.POST['inicio'], "%Y-%m-%d %H:%M") + tztimedelta
+                fin = datetime.datetime.strptime(request.POST['fin'], "%Y-%m-%d %H:%M") + tztimedelta
+                if (inicio >= fin):
+                    raise ValueError('El fin del evento debe ser después del inicio')
                 partido = Partido(
                     estadio=estadio,
                     nombre=data['nombre'],
-                    inicio=data['inicio'],
-                    fin=data['fin']
+                    inicio=inicio.strftime("%Y-%m-%d %H:%M"),
+                    fin=fin.strftime("%Y-%m-%d %H:%M")
                 )
-
+                print(partido)
                 partido.save()
                 context['EventoCreated'] = True
+            except ValueError as e:
+                print("Error en Creación del evento")
+                print(e)
+                context['error'] = e
             except Exception as e:
                 print("Error desconocido en Creación del evento")
                 print(e)
                 context['error'] = 'Error desconocido'
+            finally:
+                if (not context['EventoCreated']):
+                    return render(request, 'Estadio.html', context)
+                return HttpResponseRedirect(request.META['HTTP_REFERER'])
     else:
-        #ValidationError(_('Invalid value'), code='invalid')
         print(forms.errors)
         return HttpResponseRedirect('/')
-        # print(context)
+
 def delete_partido(request, evento_id):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
