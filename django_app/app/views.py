@@ -289,12 +289,8 @@ def create_partido(request):
         context['formInputSent'] = True
         context['create_partido_form'] = CreatePartidoForm(request.POST)
         if context['create_partido_form'].is_valid() or context['create_partido_form'].is_bound:
-
             try:
                 data = context['create_partido_form'].cleaned_data
-                print(data)
-                print(request.POST['inicio'])
-                print(request.POST['fin'])
                 estadio = Estadio.objects.all().get(id=request.POST['estadio_id'])
                 context['estadio'] = estadio
                 inicio = datetime.datetime.strptime(request.POST['inicio'], "%Y-%m-%d %H:%M") + tztimedelta
@@ -311,13 +307,15 @@ def create_partido(request):
                 partido.save()
                 context['EventoCreated'] = True
             except ValueError as e:
-                print("Error en Creación del evento")
+                print("Error ValueError en Creación del evento")
                 print(e)
                 context['error'] = e
+                if (str(e).find("time data") != -1 and str(e).find("does not match format") != -1):
+                    context['error'] = "Formato de fecha incorrecto: usar '%Y-%m-%d %H:%M', por ejemplo 2021-01-20 14:00"
             except Exception as e:
-                print("Error desconocido en Creación del evento")
-                print(e)
                 context['error'] = 'Error desconocido'
+                print("Error en Creación del evento")
+                print(e)
             finally:
                 if (not context['EventoCreated']):
                     return render(request, 'Estadio.html', context)
