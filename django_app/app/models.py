@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 class Estadio(models.Model):
     nombre = models.CharField(max_length=200)
     descripción = models.TextField(default="")
+    def __str__(self):
+        return "%d %s" % (self.id, self.nombre)
 
 class ImagenEstadio(models.Model):
     estadio = models.ForeignKey(Estadio, on_delete=models.CASCADE)
@@ -33,6 +35,8 @@ class TipoAsiento(models.Model):
     costo = models.FloatField()
     capacidad = models.IntegerField()
     descripcion = models.TextField()
+    def __str__(self):
+        return "%s. Precio: %.2f. Capacidad %d." % (self.nombre, self.costo, self.capacidad)
 
 class Reserva(models.Model):
     partido = models.ForeignKey(Partido, on_delete=models.CASCADE)

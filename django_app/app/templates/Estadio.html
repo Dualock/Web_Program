@@ -4,58 +4,48 @@
 
 <div class="fitted-box">
 
-
   {% if estadio %}
   <div class="card">
     <div class="card-header">
       <h1><small class="text-muted">Estadio</small> {{ estadio.nombre }}</h1>
     </div>
-
+    {% if not PartidoCreated and error %}
     <div class="card-body">
-      <p>{{ estadio.descripción }}</p>
-
-      <div class="card">
-        <div id="eventos-header" class="card-header cursor no-selection">
-          <h2>Eventos</h2>
-        </div>
-        <div id="eventos-body" class="card-body hidden">
-          Eventos del estadio
-        </div>
-      </div>
-
-      {% if isAuthenticated and user.is_staff %}
-      <br>
-      <div class="card">
-        <div id="admin-panel-header" class="card-header cursor no-selection">
-          <h2>Panel Administrativo</h2>
-        </div>
-        <div id="admin-panel-body" class="card-body hidden">
-          {% include "estadios/AdminPanel.html" %}
-        </div>
-      </div>
+      {% if not PartidoCreated %}
+        <div class="alert alert-danger">Partido no creado: {{ error }}</div>
       {% endif %}
-      {% else %}
-      <div class="alert alert-danger">Estadio no encontrado.</div>
-      <a class="btn btn-secondary" href="/estadios">Regresar a la Lista de Estadios</a>
+      {% if not ReservaCreated %}
+        <div class="alert alert-danger">Reserva no creado: {{ error }}</div>
       {% endif %}
-
+      <a class="btn btn-secondary" href="/estadio/{{ estadio.id }}">Regresar al Estadio</a>
     </div>
+    {% else %}
+    {% include 'estadios/DatosEstadio.html' %}
+    {% endif %}
+
 
   </div>
+  {% else %}
+  <div class="alert alert-danger">Estadio no encontrado.</div>
+  <a class="btn btn-secondary" href="/estadios">Regresar a la Lista de Estadios</a>
+  {% endif %}
 </div>
 {% endblock %}
 
 {% block end %}
-{% if isAuthenticated and user.is_staff %}
 <script>
-  $(document).ready(function () {
+$(document).ready(function () {
+  $("#partidos-header").click(function () {
+    $("#partidos-body").toggle();
+  });
+  $("#tipo-asientos-header").click(function () {
+      $("#tipo-asientos-body").toggle();
+    });
+{% if isAuthenticated and user.is_staff %}
     $("#admin-panel-header").click(function () {
       $("#admin-panel-body").toggle();
     });
-    $("#eventos-header").click(function () {
-      $("#eventos-body").toggle();
-    });
-  });
-</script>
 {% endif %}
+});
+</script>
 {% endblock %}

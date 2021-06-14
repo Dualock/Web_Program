@@ -1,10 +1,23 @@
+{% load crispy_forms_tags %}
+
 <div class="card border-success">
   <div class="card-header no-selection">
-    <h5>Crear Evento</h5>
+    <h5>Crear Partido</h5>
   </div>
+  <!-- Cambios -->
   <div class="card-body">
-    <a class="btn btn-success" href="#">Crear Evento</a>
+    <form action="/partido/create/" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="estadio_id" value="{{ estadio.id }}">
+      {{ create_partido_form|crispy }}
+      <div class="control-group">
+        <div class="controls signup-form-btn">
+          <input class="btn btn-success" type="submit" value="Crear Partido">
+        </div>
+      </div>
+    </form>
   </div>
+    <!-- Fin Cambios -->
 </div>
 <br>
 <div class="card border-success">
@@ -12,7 +25,16 @@
     <h5>Agregar Tipo de Asiento</h5>
   </div>
   <div class="card-body">
-    <a class="btn btn-success" href="/tipoAsiento/create">Agegar Tipo de Asiento</a>
+    <form action="/tipoAsiento/create/" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="estadio_id" value="{{ estadio.id }}">
+      {{ create_tipo_asiento_form|crispy }}
+      <div class="control-group">
+        <div class="controls signup-form-btn">
+          <input class="btn btn-success" type="submit" value="Crear Tipo de Asiento">
+        </div>
+      </div>
+    </form>
   </div>
 </div>
 <br>

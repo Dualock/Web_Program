@@ -5,6 +5,13 @@
 {% block content %}
 <div class="admin-page">
 
+  {% if formInputSentSignup and error %}
+    <div class="alert alert-danger">
+      Creacion de Usuario:
+      {{ error }}
+    </div>
+  {% endif %}
+
   {% include "admin/Estadios.html" %}
   {% include "admin/Usuarios.html" %}
 
