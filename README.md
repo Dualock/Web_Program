@@ -25,7 +25,9 @@ pip3 install django-crispy-forms
 ```
 ### Ejecución
 ```
-python3 manage.py runserver 0.0.0.0:8000
+python3 manage.py migrations             # inicializar base de datos.
+python3 manage.py createsuperuser        # crear superusuario inicial.
+python3 manage.py runserver 0.0.0.0:8000 # ejecutar servidor.
 ```
 
 ## Docker
@@ -44,7 +46,6 @@ docker run -p 8000:8000 -ti proyecto2 /bin/bash
 
 Para crear un superusuario(requerido para acceder al panel de administrador):
 ```
-# Iniciar el servidor
 python3 /home/proyecto2/manage.py createsuperuser # seguir las instrucciones
 ```
 
