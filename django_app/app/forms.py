@@ -41,5 +41,5 @@ class CreateTipoAsientoForm(forms.Form):
 
 class CreatePartidoForm(forms.Form):
     nombre = forms.CharField(label='Nombre')
-    inicio = forms.DateTimeField(label="Inicio", widget=forms.widgets.DateInput(attrs={'type': 'datetime-local'}))
-    fin = forms.DateTimeField(label="Fin", widget=forms.widgets.DateInput(attrs={'type': 'datetime-local'}))
+    inicio = forms.DateTimeField(label="Inicio", widget=forms.widgets.DateInput(attrs={'type': 'datetime-local', 'placeholder': '2021-01-01 00:00'}))
+    fin = forms.DateTimeField(label="Fin", widget=forms.widgets.DateInput(attrs={'type': 'datetime-local', 'placeholder': '2021-01-01 01:00'}))
