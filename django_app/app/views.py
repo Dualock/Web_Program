@@ -169,7 +169,8 @@ def admin(request):
     return render(request, 'Admin.html', context)
 
 '''
-Se crea la vista 
+Se crea la vista para crear usuarios desde la pestagna admin, se pueden crear
+tanto usuarios administradores como usuarios regulares
 '''
 def create_admin(request):
     context = getBaseContext(request=request)
@@ -207,6 +208,11 @@ def create_admin(request):
                 context['error'] = 'Error desconocido'
     return render(request, 'Admin.html', context)
 
+'''
+Se crea la vista para crear estadio en la interfaz de administrador, se
+agrega al contexto los formularios de crear estadio. Se guardan los datos
+del formulario como atributos del estadio en la base de datos
+'''
 def create_estadio(request):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
@@ -232,6 +238,10 @@ def create_estadio(request):
         # print(context)
     return HttpResponseRedirect('/estadios/')
 
+'''
+Se crea la vista que muestra los datos del usuario en perfil, ademas se accede
+a las reservas de espacios del mismo
+'''
 def perfil_view(request, user_username):
     context = getBaseContext(request=request)
     context['is_perfil_active'] = True
@@ -248,6 +258,10 @@ def perfil_view(request, user_username):
 
     return render(request, 'Perfil.html', context)
 
+'''
+Se crean las vistas de la interfaz para eliminar un estadio, accesible unicamente
+por usuarios administradores
+'''
 def delete_estadio(request, estadio_id):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
@@ -261,6 +275,11 @@ def delete_estadio(request, estadio_id):
 
     return HttpResponseRedirect('/estadios')
 
+'''
+Se crean las vistas de la interfaz para crear tipos de asientos, se agregan
+los formularios para la creacion de tipos de asientos y se guardan los Datos
+ingresados en la base de datos de sql con el metodo object.save()
+'''
 def create_tipo_asiento(request):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
@@ -290,7 +309,11 @@ def create_tipo_asiento(request):
         # print(context)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-
+'''
+Se crean las vistas en la pagina de estadio para agendar un partido
+se agregan los formularios al contexto y se almacenan los datos del objeto
+partido en la base de datos con el metodo object.save()
+'''
 def create_partido(request):
     request.session['django_timezone'] = "America/Costa_Rica"
     context = getBaseContext(request=request)
@@ -336,6 +359,11 @@ def create_partido(request):
         print(forms.errors)
         return HttpResponseRedirect('/')
 
+'''
+Se crean las vistas para eliminar partidos, solo los administradores
+puede acceder a esta vista, se borran de la base de datos con
+Partido.objects.get(id=partido_id).delete()
+'''
 def delete_partido(request, partido_id):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
@@ -349,6 +377,11 @@ def delete_partido(request, partido_id):
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+'''
+Se crean las vistas para eliminar los tipos de asiento, solo los administradores
+puede acceder a esta vista. se borran de la base de datos con
+TipoAsiento.objects.get(id=tipo_asiento_id).delete()
+'''
 def delete_tipo_asiento(request, tipo_asiento_id):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
@@ -362,6 +395,10 @@ def delete_tipo_asiento(request, tipo_asiento_id):
 
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+'''
+Se crean las vistas para borrar a un usuario, se borra de la base de Datos
+con el metodo object.delete()
+'''
 def delete_user(request, user_id):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
@@ -378,7 +415,11 @@ def delete_user(request, user_id):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
     except KeyError as e:
         return HttpResponseRedirect("/admin")
-
+'''
+Se crean las vistas para hacer staff a un usuario, unicamente los administradores
+pueden acceder a esta vista, se guardan los datos del usuario luego de darle
+permisos para ser staff
+'''
 def make_staff_user(request, user_id):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
@@ -398,6 +439,11 @@ def make_staff_user(request, user_id):
     except KeyError as e:
         return HttpResponseRedirect("/admin")
 
+'''
+Se crean las vistas para remover la condicion de staff a un usuario,
+unicamente los administradores pueden acceder a esta vista, se guardan los datos
+ del usuario luego de quitarle los permisos para ser staff
+'''
 def remove_staff_user(request, user_id):
     context = getBaseContext(request=request)
     if not context['isAuthenticated'] or not context['user'].is_staff:
@@ -417,7 +463,11 @@ def remove_staff_user(request, user_id):
     except KeyError as e:
         return HttpResponseRedirect("/admin")
 
-
+'''
+Se crean las vistas para crear reserva, utilizando los datos de los objetos
+partidos, tipos de asiento y usuarios, luego se inicializa el objeto reserva
+y se almacenan los datos en la base de datos
+'''
 def create_reserva(request):
     context = getBaseContext(request=request)
     context['ReservaCreated'] = False
@@ -449,7 +499,10 @@ def create_reserva(request):
     else:
         print(forms.errors)
         return HttpResponseRedirect('/')
-
+'''
+Se crean las vistas para eliminar reserva, cada usuario puede eliminar su
+reserva en caso de que asi lo desee, se borran de la base de datos con reserva.delete()
+'''
 def delete_reserva(request, reserva_id):
     context = getBaseContext(request=request)
     reserva = None
