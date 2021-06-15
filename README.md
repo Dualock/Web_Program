@@ -75,7 +75,7 @@ python3 manage.py sqlmigrate app 0001
 python3 manage.py migrate
 ```
 
-###Compilacion y ejecucion automatica
+### Compilacion y ejecucion automatica
 Desde la carpeta Web_program
 Ejecutar docker.sh para realizar la instalacion automatica de docker:
 ```

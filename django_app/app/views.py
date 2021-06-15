@@ -31,6 +31,10 @@ def index(request):
     context['is_home_active'] = True
     return render(request, "Home.html", context)
 
+'''
+Se crea la vista estadios, se agregan paginas de estadios al contexto para
+el renderizado
+'''
 def estadios(request, pagina=1, per_page=5):
     context = getBaseContext(request=request)
     context['is_estadio_active'] = True
@@ -45,6 +49,10 @@ def estadios(request, pagina=1, per_page=5):
     context['num_paginas'] = estadios.num_pages
     return render(request, 'Estadios.html', context)
 
+'''
+Se crea la vista estadio, se agregan los formularios para asientos y partidos
+al contexto para el renderizado
+'''
 def estadio(request, estadio_id):
     context = getBaseContext(request=request)
     context['is_estadio_active'] = True
@@ -60,6 +68,11 @@ def estadio(request, estadio_id):
 
     return render(request, 'Estadio.html', context)
 
+'''
+Se crea la vista para el ingreso de usuario, se agregan los formularios de ingreso
+y se agregan al contexto para el renderizado, usa metodos de la clase (modelo) user
+que ofrece django para generar un sistema de autenticacion
+'''
 def log_in(request):
     context = getBaseContext(request=request)
     context['is_login_active'] = True
@@ -86,6 +99,11 @@ def log_in(request):
 
     return render(request, 'Login.html', context)
 
+
+'''
+Se crea la vista para el registro de usuarios, se agregan los formularios de
+registro al contexto para el renderizado
+'''
 def signup(request):
     context = getBaseContext(request=request)
     context['is_signup_active'] = True
@@ -120,10 +138,21 @@ def signup(request):
     print(context)
     return render(request, 'Signup.html', context)
 
+'''
+Se crea la vista para cerrar sesion, devuelve al usuario a home
+'''
 def log_out(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+'''
+Se crea la vista que se muestra cuando un usuario es administrador
+Se agregan los formularios para crear estadios, para crear cuentas para usuarios
+regulares y se agregan al contexto para el renderizado asi como la lista de
+todos los estadios y usuarios creados.
+se agrega tambien la funcionalidad para manejar como se distribuyen los tipos de
+asientos y cuales eventos(partidos) se llevan a cabo
+'''
 def admin(request):
     context = getBaseContext(request=request)
     if not (context['isAuthenticated'] and (context['user'].is_staff or context['user'].is_superadmin)):
@@ -139,6 +168,9 @@ def admin(request):
 
     return render(request, 'Admin.html', context)
 
+'''
+Se crea la vista 
+'''
 def create_admin(request):
     context = getBaseContext(request=request)
     if not (context['isAuthenticated'] and (context['user'].is_staff or context['user'].is_superadmin)):
